@@ -26,11 +26,12 @@ p{max-width:62ch}
 a{color:inherit}
 .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
 section{padding:80px 0}
+section,#top{scroll-margin-top:72px}
 .btn{display:inline-block;background:var(--apricot);color:#22393A;font:600 1rem var(--sans);padding:14px 28px;border-radius:999px;border:0;text-decoration:none;cursor:pointer}
 .btn:hover{filter:brightness(.95)}
 .btn.ghost{background:transparent;border:1.5px solid var(--teal);color:var(--teal);margin-left:10px}
 :focus-visible{outline:3px solid var(--teal);outline-offset:3px}
-header{padding:20px 0}
+header{position:sticky;top:0;z-index:20;padding:14px 0;background:rgba(249,250,247,.95);backdrop-filter:blur(8px)}
 header .wrap{display:flex;justify-content:space-between;align-items:center}
 .logo{font-family:var(--serif);font-size:1.2rem;text-decoration:none}
 nav a{margin-left:22px;text-decoration:none;color:var(--muted);font-weight:500}
@@ -39,6 +40,8 @@ nav a:hover{color:var(--ink)}
 .hero .wrap{display:block}
 .hero .wrap>div{max-width:760px}
 .hero p{color:var(--muted);margin:18px 0 28px;font-size:1.1rem}
+.hero p.sub{font-family:var(--serif);color:var(--teal);font-size:clamp(1.15rem,2.6vw,1.5rem);line-height:1.35;margin:14px 0 0;max-width:30ch}
+.hero p.sub+p{margin-top:18px}
 .photo{aspect-ratio:1/1;border-radius:50%;box-shadow:0 0 0 8px var(--white),0 14px 40px rgba(31,58,68,.14);background:linear-gradient(160deg,var(--sage),var(--peach));overflow:hidden;position:relative}
 .photo img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
 .badge{display:inline-block;background:var(--sage);color:var(--teal);padding:6px 14px;border-radius:999px;font-weight:600;font-size:.9rem;margin-bottom:18px}
@@ -52,7 +55,10 @@ nav a:hover{color:var(--ink)}
 .item p{color:var(--muted);font-size:.97rem}
 .about .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px}
 .about ul{list-style:none;padding:0;margin-top:14px}
+.edu-box{background:var(--white);border:1px solid var(--line);border-radius:28px;padding:30px 32px 14px;align-self:start;box-shadow:0 8px 28px rgba(31,58,68,.06)}
+.edu-box h3{margin-bottom:0}
 .about li{padding:14px 0;border-bottom:1px solid var(--line)}
+.edu-box li:last-child{border-bottom:0}
 .about li strong{display:block}
 .about li span{color:var(--muted);font-size:.95rem}
 .book{background:var(--blush)}
@@ -110,9 +116,29 @@ footer p{margin:6px auto}
   .grid4 .item:first-child{grid-column:1/-1}
   .photo{max-width:340px}
   nav a:not(.keep){display:none}
+  header .wrap{flex-wrap:nowrap;gap:12px}
+  .logo{font-size:1.05rem;white-space:nowrap}
+  nav a.keep{margin-left:0;display:inline-block;white-space:nowrap;background:var(--apricot);color:#22393A;font-weight:600;font-size:.9rem;padding:9px 16px;border-radius:999px}
   section{padding:56px 0}
 }
-@media (max-width:520px){.grid4,.row2{grid-template-columns:1fr}.grid4 .item:first-child{grid-column:auto}.btn.ghost{margin:12px 0 0}}
+@media (max-width:520px){
+  .grid4,.row2{grid-template-columns:1fr}.grid4 .item:first-child{grid-column:auto}
+  .wrap{padding:0 20px}
+  h1{font-size:2rem}
+  h2{font-size:1.6rem}
+  .hero{padding:24px 0 52px}
+  .badge{font-size:.78rem;padding:6px 12px;margin-bottom:14px}
+  .hero p{font-size:1.02rem;margin:14px 0 24px}
+  .hero p.sub{font-size:1.15rem;margin-top:12px}
+  .hero p.sub+p{margin-top:14px}
+  .hero .btn{display:block;width:100%;text-align:center}
+  .btn.ghost{margin:12px 0 0}
+  section{padding:44px 0}
+  .card{padding:22px 16px;border-radius:22px}
+  .chip{min-width:70px;padding:10px 10px}
+  .edu-box{padding:24px 22px 10px}
+  .opt span{padding:9px 12px}
+}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
@@ -120,83 +146,82 @@ footer p{margin:6px auto}
 
 <header><div class="wrap">
   <a class="logo" href="#top">Abhishek Prajapati</a>
-  <nav><a href="#focus">Support</a><a href="#about">About</a><a class="keep" href="#book">Book a session</a></nav>
+  <nav><a href="#focus">Support</a><a href="#about">About</a><a class="keep" href="#book">Book a Session</a></nav>
 </div></header>
 
 <main id="top">
 <section class="hero"><div class="wrap">
   <div>
-    <span class="badge">Mental Health First Aider (USA)</span>
-    <h1>A calm space to feel heard and find your footing.</h1>
-    <p>I'm a counsellor and mental health advocate. Together we'll work through social nervousness and anxiety, build clarity and strengthen how you see yourself, at a pace that feels safe.</p>
-    <a class="btn" href="#book">Book your first session</a>
-    <a class="btn ghost" href="#about">Meet your counsellor</a>
+    <span class="badge">US Certified Mental Health First Aider &amp; Counsellor</span>
+    <h1>A calm space to feel heard and find yourself.</h1>
+    <p class="sub">A little more clarity. A little more confidence. A little more you.</p>
+    <p>I'm a counsellor and mental health advocate, offering a calm, supportive space to ease anxiety, understand yourself better and learn to trust who you are, one step at a time.</p>
+    <a class="btn" href="#book">Book Your First Session</a>
+    <a class="btn ghost" href="#about">Meet Your Counsellor</a>
   </div>
 </div></section>
 
 <section class="focus" id="focus"><div class="wrap">
-  <h2>What we can work on</h2>
+  <h2>What We Can Work On</h2>
   <p>Every session is private and shaped around what you need right now.</p>
   <div class="grid4">
-    <div class="item"><h3>Social nervousness</h3><p>Understand what happens in social situations and practise steady, realistic ways to feel more at ease around people.</p></div>
-    <div class="item"><h3>General anxiety</h3><p>Understand your triggers and learn practical tools to calm racing thoughts.</p></div>
+    <div class="item"><h3>Social Nervousness</h3><p>Understand what happens in social situations and practise steady, realistic ways to feel more at ease around people.</p></div>
+    <div class="item"><h3>General Anxiety</h3><p>Understand your triggers and learn practical tools to calm racing thoughts.</p></div>
     <div class="item"><h3>Clarity</h3><p>Sort through decisions, stress and mixed feelings so your next step is clearer.</p></div>
-    <div class="item"><h3>Emotional well-being</h3><p>Build healthy ways to process feelings and strengthen everyday resilience.</p></div>
-    <div class="item"><h3>Self-esteem</h3><p>Soften self-criticism and grow a steadier, kinder relationship with yourself.</p></div>
+    <div class="item"><h3>Emotional Well-Being</h3><p>Build healthy ways to process feelings and strengthen everyday resilience.</p></div>
+    <div class="item"><h3>Self-Esteem</h3><p>Soften self-criticism and grow a steadier, kinder relationship with yourself.</p></div>
   </div>
 </div></section>
 
 <section class="about" id="about"><div class="wrap">
   <div>
-    <h2>About me</h2>
-    <p>I'm Abhishek, a counsellor and mental health advocate based in Indore. I hold an MA in Counselling Psychology and am certified in Adult Mental Health First Aid (USA). I know how heavy it can feel to be nervous around others or to be hard on yourself.</p>
+    <h2>About Me</h2>
+    <p>I'm Abhishek, a counsellor and mental health advocate based in Indore. I hold an MA in Clinical Psychology and am certified in Adult Mental Health First Aid (USA). I know how heavy it can feel to be nervous around others or to be hard on yourself.</p>
     <p style="margin-top:12px">In our sessions I listen first, ask careful questions and share practical tools you can use between meetings, always at a pace that suits you.</p>
   </div>
-  <div>
-    <h3>Education and certifications</h3>
+  <div class="edu-box">
+    <h3>Education and Certifications</h3>
     <ul>
       <li><strong>Adult Mental Health First Aid (USA)</strong><span>National Council for Mental Wellbeing, 2025</span></li>
-      <li><strong>MA, Counselling Psychology</strong><span>Shri Vaishnav Institute of Social Science, Humanities and Arts, Indore, 2025</span></li>
-      <li><strong>BA (Hons), Psychology</strong><span>Shri Vaishnav Institute of Social Science, Humanities and Arts, Indore, 2021</span></li>
-      <li><strong>Behavioural training</strong><span>Certificate</span></li>
+      <li><strong>MA, Clinical Psychology</strong></li>
+      <li><strong>BA (Hons), Psychology</strong></li>
     </ul>
-
   </div>
 </div></section>
 
 <section class="book" id="book"><div class="wrap">
   <div class="info">
-    <h2>Get started on your journey</h2>
+    <h2>Get Started on Your Journey</h2>
     <p>Your first step: a one-to-one session to talk, be heard and map out where you'd like to go.</p>
     <p class="price">₹499 per session</p>
     <p style="margin-top:18px">Choose a day and time from my available slots. I'll confirm your booking personally.</p>
   </div>
 
   <div class="card">
-    <h3>1. Pick a day</h3>
+    <h3>1. Pick a Day</h3>
     <div class="days" id="days"></div>
     <div class="pager"><button type="button" class="pg" id="prevDays" aria-label="Earlier days">&larr; Earlier</button><button type="button" class="pg" id="nextDays" aria-label="Later days">Later &rarr;</button></div>
-    <h3>2. Pick a time</h3>
+    <h3>2. Pick a Time</h3>
     <div class="times" id="times"><span class="hint">Choose a day to see available times.</span></div>
-    <h3>3. Your details</h3>
+    <h3>3. Your Details</h3>
     <div class="row2">
       <div><label for="name">Name</label><input id="name" autocomplete="name"></div>
       <div><label for="phone">Phone</label><input id="phone" type="tel" autocomplete="tel"></div>
     </div>
     <label for="email">Email</label><input id="email" type="email" autocomplete="email">
     <label for="msg">What would you like support with? (optional)</label><textarea id="msg"></textarea>
-    <h3>4. A short assessment</h3>
+    <h3>4. A Short Assessment</h3>
     <p class="assess-intro">A few quick questions help me understand how you've been feeling, so our first session can start where you are. It takes about 4 minutes, and there are no right or wrong answers.</p>
-    <button type="button" class="btn-assess" id="assessBtn" aria-expanded="false" aria-controls="assessWrap">Take the short assessment</button>
+    <button type="button" class="btn-assess" id="assessBtn" aria-expanded="false" aria-controls="assessWrap">Take the Short Assessment</button>
     <div class="crisis" id="crisis" role="alert" hidden>Thank you for telling me. You don't have to wait for a session. Please call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours), or go to your nearest emergency room. You can still send your request below.</div>
     <div id="assessWrap" hidden>
       <div id="assess"></div>
-      <label class="consent"><input type="checkbox" id="consent"><span>I agree to share my answers with Abhishek by WhatsApp so he can prepare for our session.</span></label>
+      <label class="consent"><input type="checkbox" id="consent"><span id="consentTxt">I agree to share my answers with Abhishek by WhatsApp so he can prepare for our session.</span></label>
     </div>
     <div class="summary" id="summary" hidden></div>
     <div class="err" id="err" role="alert"></div>
-    <button class="btn" id="send" type="button">Request this session</button>
-    <p class="note">Your request and answers open in WhatsApp so you can send them to me directly. They are not stored on this website. Everything you share stays confidential. This service is support and counselling, not emergency care. If you are in crisis, call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours, India) or your local emergency number.</p>
+    <button class="btn" id="send" type="button">Request This Session</button>
+    <p class="note" id="noteTxt">Your request and answers open in WhatsApp so you can send them to me directly. They are not stored on this website. Everything you share stays confidential. This service is support and counselling, not emergency care. If you are in crisis, call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours, India) or your local emergency number.</p>
   </div>
 </div></section>
 </main>
@@ -211,8 +236,9 @@ footer p{margin:6px auto}
 /* ========= EDIT THIS SECTION ========= */
 const CONFIG = {
   whatsapp: "917987035065",          // country code + number, no + or spaces
-  email: "abhishekprajapati9815@gmail.com",
+  email: "growthwiththeabhishek@gmail.com",
   price: "₹499",
+  web3formsKey: "051af225-423c-4492-ba93-26c4915aeb8b",                  // paste your free Web3Forms access key here to ALSO get every request by email (leave empty for WhatsApp only)
   daysAhead: 60,                     // how many days ahead people can book (always counted from today, so it never runs out)
   // Your weekly availability: 0=Sun ... 6=Sat. Remove or add times freely.
   slots: {
@@ -282,20 +308,20 @@ function updateSummary(){
   else s.hidden = true;
 }
 const ASSESS=[
- {id:"spin",name:"Social nervousness",title:"Social situations",intro:"Over the past week, how much did each of these apply to you?",
+ {id:"spin",name:"Social nervousness",title:"Social Situations",intro:"Over the past week, how much did each of these apply to you?",
   opts:["Not at all","A little bit","Somewhat","Very much","Extremely"],vals:[0,1,2,3,4],
   items:["Fear of embarrassment causes me to avoid doing things or speaking to people.","I avoid activities in which I am the centre of attention.","Being embarrassed or looking stupid are among my worst fears."]},
- {id:"gad",name:"General anxiety",title:"Worry and nerves",intro:"Over the last 2 weeks, how often have you been bothered by the following?",
+ {id:"gad",name:"General anxiety",title:"Worry and Nerves",intro:"Over the last 2 weeks, how often have you been bothered by the following?",
   opts:["Not at all","Several days","More than half the days","Nearly every day"],vals:[0,1,2,3],
   items:["Feeling nervous, anxious or on edge","Not being able to stop or control worrying","Worrying too much about different things","Trouble relaxing","Being so restless that it is hard to sit still","Becoming easily annoyed or irritable","Feeling afraid, as if something awful might happen"]},
- {id:"who",name:"Emotional well-being",title:"Well-being",intro:"Over the last 2 weeks:",
+ {id:"who",name:"Emotional well-being",title:"Well-Being",intro:"Over the last 2 weeks:",
   opts:["At no time","Some of the time","Less than half the time","More than half the time","Most of the time","All of the time"],vals:[0,1,2,3,4,5],
   items:["I have felt cheerful and in good spirits","I have felt calm and relaxed","I have felt active and vigorous","I woke up feeling fresh and rested","My daily life has been filled with things that interest me"]},
- {id:"rses",name:"Self-esteem",title:"How you see yourself",intro:"How much do you agree with each statement?",
+ {id:"rses",name:"Self-esteem",title:"How You See Yourself",intro:"How much do you agree with each statement?",
   opts:["Strongly disagree","Disagree","Agree","Strongly agree"],vals:[0,1,2,3],
   items:["On the whole, I am satisfied with myself.","At times I think I am no good at all.","I feel that I have a number of good qualities.","I am able to do things as well as most other people.","I feel I do not have much to be proud of.","I certainly feel useless at times.","I feel that I am a person of worth, at least on an equal plane with others.","I wish I could have more respect for myself.","All in all, I am inclined to feel that I am a failure.","I take a positive attitude toward myself."],
   rev:[1,4,5,7,8]},
- {id:"safe",name:"Safety",title:"One last question",intro:"",
+ {id:"safe",name:"Safety",title:"One Last Question",intro:"",
   opts:["No","Yes","Prefer not to say"],vals:[0,1,2],
   items:["In the last 2 weeks, have you had thoughts of ending your life or of hurting yourself?"]}
 ];
@@ -328,7 +354,7 @@ function updateAssessBtn(){
   btn.setAttribute("aria-expanded",open?"true":"false");
   btn.classList.toggle("done",n===TOTAL_Q);
   btn.textContent = open ? "Assessment: "+n+" of "+TOTAL_Q+" answered (tap to hide)"
-    : n===0 ? "Take the short assessment"
+    : n===0 ? "Take the Short Assessment"
     : n===TOTAL_Q ? "Assessment complete \u2713 (tap to review)"
     : "Assessment: "+n+" of "+TOTAL_Q+" answered (tap to continue)";
 }
@@ -346,6 +372,58 @@ function readAssess(){
   });
   return {res,missing};
 }
+const GAD_LBL=["feeling nervous or on edge","not being able to stop worrying","worrying too much about different things","trouble relaxing","restlessness","irritability","fear that something awful might happen"];
+const WHO_LBL=["feeling cheerful","feeling calm and relaxed","feeling active and energetic","waking up rested","having interests in daily life"];
+const RSES_LBL=["low satisfaction with self","thoughts of being 'no good'","difficulty seeing own good qualities","feeling less capable than others","having little to be proud of","feeling useless at times","feeling less worthy than others","wanting more self-respect","feeling like a failure","a negative attitude toward self"];
+function buildSummary(res,sc){
+  const {spin,gad,who,ros,rscored}=sc, safe=res.safe[0], out=[];
+  const flags=[];
+  if(gad>=10) flags.push("anxiety ("+(gad>=15?"severe":"moderate")+" range)");
+  if(spin>=6) flags.push("social anxiety");
+  if(who<13) flags.push(who<=7?"very low well-being":"low well-being");
+  if(ros<15) flags.push("low self-esteem");
+  // overall
+  let overall;
+  if(!flags.length) overall="No scale is in the flagged range. This may be a milder concern, everyday stress or a need for clarity; explore what prompted the booking.";
+  else if(flags.length===1) overall="One area stands out: "+flags[0]+".";
+  else overall=flags.length+" areas are flagged together ("+flags.join(", ")+"), which can point to broader distress rather than one isolated issue.";
+  out.push("- Overall: "+overall);
+  // patterns
+  const pat=[];
+  if(gad>=10 && spin<6) pat.push("Anxiety looks general (worry and tension) rather than mainly social.");
+  if(gad>=10 && spin>=6) pat.push("Anxiety shows up strongly in social situations.");
+  if(gad<10 && spin>=6) pat.push("Nervousness seems specific to social situations.");
+  if(who<13 && gad>=10) pat.push("Low energy or mood alongside anxiety: anxiety may be affecting rest and enjoyment, and low mood may be present (consider a PHQ-9).");
+  else if(who<=7) pat.push("Very low well-being without high anxiety: worth screening for low mood.");
+  if(ros<15 && (gad>=10||who<13||spin>=6)) pat.push("Low self-esteem alongside distress: self-critical thinking may be feeding or maintaining it.");
+  if(pat.length) out.push("- Pattern: "+pat.join(" "));
+  // standout items
+  const st=[];
+  const g=res.gad.map((v,i)=>[v,i]).filter(a=>a[0]>=2).sort((a,b)=>b[0]-a[0]||a[1]-b[1]).slice(0,3).map(a=>GAD_LBL[a[1]]);
+  if(g.length) st.push("most frequent anxiety symptoms: "+g.join("; "));
+  if(who<13){
+    const w=res.who.map((v,i)=>[v,i]).filter(a=>a[0]<=1);
+    if(w.length===5) st.push("all five well-being items rated low (rarely felt)");
+    else if(w.length) st.push("lowest well-being areas: "+w.sort((a,b)=>a[0]-b[0]||a[1]-b[1]).slice(0,3).map(a=>WHO_LBL[a[1]]).join("; "));
+  }
+  if(ros<15){
+    const r=rscored.map((v,i)=>[v,i]).filter(a=>a[0]<=1).sort((a,b)=>a[0]-b[0]||a[1]-b[1]).slice(0,3).map(a=>RSES_LBL[a[1]]);
+    if(r.length) st.push("self-esteem concerns: "+r.join("; "));
+  }
+  if(st.length) out.push("- Standout answers: "+st.join(" | ")+".");
+  // focus
+  const f=[];
+  if(safe===1) f.push("safety check first (ask directly about suicidal thoughts, any plan, and support available)");
+  if(gad>=10) f.push("anxiety: triggers, worry patterns, calming and grounding tools");
+  if(who<13) f.push("energy, sleep and daily routine; screen for low mood");
+  if(spin>=6) f.push("social situations: gradual practice and thought challenging");
+  if(ros<15) f.push("self-criticism and self-worth");
+  if(!f.length) f.push("open exploration of what prompted the booking");
+  out.push("- Suggested focus for session 1: "+f.slice(0,4).join("; ")+".");
+  if(safe===1||gad>=15||(who<=7&&gad>=10)) out.push("- Consider whether a psychiatric or medical referral is needed alongside counselling.");
+  out.push("_Auto-generated from self-report scores to help you prepare. Not a diagnosis._");
+  return out;
+}
 function interpret(res){
   const sum=a=>a.reduce((x,y)=>x+y,0), L=[];
   const spin=sum(res.spin);
@@ -356,11 +434,12 @@ function interpret(res){
   const who=sum(res.who), pct=who*4;
   const wb=who<=7?"Very low well-being; consider screening for low mood.":who<13?"Low well-being (below 50%).":"Within the typical range.";
   L.push("Well-being (WHO-5): "+who+"/25 ("+pct+"%). "+wb);
-  const rv=ASSESS[3].rev, ros=sum(res.rses.map((v,k)=>rv.includes(k)?3-v:v));
+  const rv=ASSESS[3].rev, rscored=res.rses.map((v,k)=>rv.includes(k)?3-v:v), ros=sum(rscored);
   L.push("Self-esteem (Rosenberg): "+ros+"/30. "+(ros<15?"Below the typical range (15-25), suggesting low self-esteem.":ros<=25?"Within the typical range (15-25).":"Above the typical range."));
   const sf=res.safe[0];
   const safe=sf===1?"*SAFETY: answered YES to thoughts of ending life or self-harm. Please follow up soon.*":sf===2?"Safety question: preferred not to say.":"Safety question: answered No.";
-  return {safe,lines:L,items:{spin:res.spin,gad:res.gad,who:res.who,rses:res.rses}};
+  const summary=buildSummary(res,{spin,gad,who,ros,rscored});
+  return {safe,summary,lines:L,items:{spin:res.spin,gad:res.gad,who:res.who,rses:res.rses}};
 }
 $("send").onclick = () => {
   const name=$("name").value.trim(), phone=$("phone").value.trim(), email=$("email").value.trim(), msg=$("msg").value.trim();
@@ -378,7 +457,9 @@ $("send").onclick = () => {
   const r=interpret(res);
   const text = "Hello, I'd like to book a session.\n\nDate: "+prettyDate(chosenDate)+"\nTime: "+chosenTime+
     "\nSession fee: "+CONFIG.price+"\nName: "+name+"\nPhone: "+phone+(email?"\nEmail: "+email:"")+(msg?"\nSupport needed: "+msg:"")+
-    "\n\n*Pre-session questionnaire* (self-report screening, not a diagnosis)\n"+r.safe+"\n"+r.lines.join("\n")+
+    "\n\n*Pre-session questionnaire* (self-report screening, not a diagnosis)\n"+r.safe+
+    "\n\n*Summary: what may be going on*\n"+r.summary.join("\n")+
+    "\n\n*Scores*\n"+r.lines.join("\n")+
     "\n\nItem answers as ticked: Mini-SPIN "+r.items.spin.join(",")+" | GAD-7 "+r.items.gad.join(",")+" | WHO-5 "+r.items.who.join(",")+" | Rosenberg "+r.items.rses.join(",")+
     "\nI agree to share these answers with you.";
   if(CONFIG.whatsapp==="919999999999"){
@@ -386,7 +467,21 @@ $("send").onclick = () => {
     return;
   }
   window.open("https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(text),"_blank");
+  emailCopy(text,name,email);
 };
+function emailCopy(text,name,email){
+  if(!CONFIG.web3formsKey) return;
+  const body={access_key:CONFIG.web3formsKey,subject:"New session request: "+name+", "+prettyDate(chosenDate)+" "+chosenTime,
+    from_name:"Counselling website",name:name,message:text,botcheck:""};
+  if(email) body.email=email;
+  try{
+    fetch("https://api.web3forms.com/submit",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(body)}).catch(()=>{});
+  }catch(e){}
+}
+if(CONFIG.web3formsKey){
+  $("consentTxt").textContent="I agree to share my answers with Abhishek by WhatsApp and email so he can prepare for our session.";
+  $("noteTxt").textContent="Your request and answers open in WhatsApp so you can send them to me directly, and a copy is emailed to me through a form service (Web3Forms). Everything you share stays confidential. This service is support and counselling, not emergency care. If you are in crisis, call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours, India) or your local emergency number.";
+}
 $("contactline").innerHTML = 'Email: <a href="mailto:'+CONFIG.email+'">'+CONFIG.email+'</a>';
 buildDays(); renderDays(); renderAssess();
 </script>
