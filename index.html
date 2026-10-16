@@ -441,7 +441,7 @@ function interpret(res){
   const summary=buildSummary(res,{spin,gad,who,ros,rscored});
   return {safe,summary,lines:L,items:{spin:res.spin,gad:res.gad,who:res.who,rses:res.rses}};
 }
-$("send").onclick = () => {
+$("send").onclick = async () => {
   const name=$("name").value.trim(), phone=$("phone").value.trim(), email=$("email").value.trim(), msg=$("msg").value.trim();
   const err=$("err"); err.textContent="";
   if(!chosenDate || !chosenTime){err.textContent="Please choose a day and a time."; return;}
@@ -454,33 +454,41 @@ $("send").onclick = () => {
     $(missing[0]).scrollIntoView({behavior:"smooth",block:"center"}); return;
   }
   if(!$("consent").checked){openAssess(); err.textContent="Please tick the box to agree to share your answers."; $("consent").scrollIntoView({behavior:"smooth",block:"center"}); return;}
-  const r=interpret(res);
-  const text = "Hello, I'd like to book a session.\n\nDate: "+prettyDate(chosenDate)+"\nTime: "+chosenTime+
-    "\nSession fee: "+CONFIG.price+"\nName: "+name+"\nPhone: "+phone+(email?"\nEmail: "+email:"")+(msg?"\nSupport needed: "+msg:"")+
-    "\n\n*Pre-session questionnaire* (self-report screening, not a diagnosis)\n"+r.safe+
+  const r=interpret(res), flagged=res.safe[0]===1;
+  const details="Date: "+prettyDate(chosenDate)+"\nTime: "+chosenTime+"\nSession fee: "+CONFIG.price+"\nName: "+name+"\nPhone: "+phone+(email?"\nEmail: "+email:"")+(msg?"\nSupport needed: "+msg:"");
+  const assess="*Pre-session questionnaire* (self-report screening, not a diagnosis)\n"+r.safe+
     "\n\n*Summary: what may be going on*\n"+r.summary.join("\n")+
     "\n\n*Scores*\n"+r.lines.join("\n")+
     "\n\nItem answers as ticked: Mini-SPIN "+r.items.spin.join(",")+" | GAD-7 "+r.items.gad.join(",")+" | WHO-5 "+r.items.who.join(",")+" | Rosenberg "+r.items.rses.join(",")+
     "\nI agree to share these answers with you.";
-  if(CONFIG.whatsapp==="919999999999"){
-    window.location.href="mailto:"+CONFIG.email+"?subject="+encodeURIComponent("Session request: "+prettyDate(chosenDate)+" "+chosenTime)+"&body="+encodeURIComponent(text);
-    return;
+  const btn=$("send"), label=btn.textContent;
+  btn.disabled=true; btn.textContent="Sending...";
+  const w=window.open("","_blank");           // opened now so the browser allows it; filled in below
+  let emailed=false;
+  if(CONFIG.web3formsKey){
+    emailed=await sendEmail((flagged?"[SAFETY FLAG] ":"")+"Assessment results: "+name+", "+prettyDate(chosenDate)+" "+chosenTime,
+      "New session request and assessment results\n\n"+details+"\n\n"+assess,name,email);
   }
-  window.open("https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(text),"_blank");
-  emailCopy(text,name,email);
+  let waText="Hello, I'd like to book a session.\n\n"+details;
+  if(emailed) waText+="\n\nAssessment completed: results sent to your email."+(flagged?"\nPriority: please check your email soon.":"");
+  else waText+="\n\n"+assess;                  // fallback so results are never lost if email is off or fails
+  const url="https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(waText);
+  if(w && !w.closed){w.location.href=url;} else {window.location.href=url;}
+  btn.disabled=false; btn.textContent=label;
 };
-function emailCopy(text,name,email){
-  if(!CONFIG.web3formsKey) return;
-  const body={access_key:CONFIG.web3formsKey,subject:"New session request: "+name+", "+prettyDate(chosenDate)+" "+chosenTime,
-    from_name:"Counselling website",name:name,message:text,botcheck:""};
+async function sendEmail(subject,message,name,email){
+  const body={access_key:CONFIG.web3formsKey,subject:subject,from_name:"Counselling website",name:name,message:message,botcheck:""};
   if(email) body.email=email;
+  const ctl=new AbortController(), t=setTimeout(()=>ctl.abort(),9000);
   try{
-    fetch("https://api.web3forms.com/submit",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(body)}).catch(()=>{});
-  }catch(e){}
+    const resp=await fetch("https://api.web3forms.com/submit",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(body),signal:ctl.signal});
+    const j=await resp.json(); return !!(resp.ok && j.success);
+  }catch(e){return false;}
+  finally{clearTimeout(t);}
 }
 if(CONFIG.web3formsKey){
-  $("consentTxt").textContent="I agree to share my answers with Abhishek by WhatsApp and email so he can prepare for our session.";
-  $("noteTxt").textContent="Your request and answers open in WhatsApp so you can send them to me directly, and a copy is emailed to me through a form service (Web3Forms). Everything you share stays confidential. This service is support and counselling, not emergency care. If you are in crisis, call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours, India) or your local emergency number.";
+  $("consentTxt").textContent="I agree to share my booking details with Abhishek by WhatsApp, and my assessment answers by email, so he can prepare for our session.";
+  $("noteTxt").textContent="Your booking request opens in WhatsApp so you can send it to me directly. Your assessment answers are emailed to me through a form service (Web3Forms) and are not sent in WhatsApp. Everything you share stays confidential. This service is support and counselling, not emergency care. If you are in crisis, call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours, India) or your local emergency number.";
 }
 $("contactline").innerHTML = 'Email: <a href="mailto:'+CONFIG.email+'">'+CONFIG.email+'</a>';
 buildDays(); renderDays(); renderAssess();
