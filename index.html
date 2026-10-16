@@ -72,6 +72,8 @@ nav a:hover{color:var(--ink)}
 .chip{border:1.5px solid var(--line);background:transparent;color:var(--ink);border-radius:14px;padding:10px 14px;font:500 .95rem var(--sans);cursor:pointer;text-align:center;min-width:76px}
 .chip small{display:block;color:var(--muted);font-size:.78rem}
 .chip:hover{border-color:var(--teal)}
+.chip:disabled{color:#A9B7B5;background:#EEF2F1;border-style:dashed;cursor:not-allowed;text-decoration:line-through}
+.chip:disabled:hover{border-color:var(--line)}
 .chip[aria-pressed=true]{background:var(--teal);border-color:var(--teal);color:#fff}
 .chip[aria-pressed=true] small{color:#D6EBEC}
 .hint{color:var(--muted);font-size:.95rem}
@@ -239,6 +241,7 @@ const CONFIG = {
   email: "growthwiththeabhishek@gmail.com",
   price: "₹499",
   web3formsKey: "051af225-423c-4492-ba93-26c4915aeb8b",                  // paste your free Web3Forms access key here to ALSO get every request by email (leave empty for WhatsApp only)
+  bookingsUrl: "https://script.google.com/macros/s/AKfycbxO49CC4GKU1g-YB6GkjRxyHvP8yz1fwgNfJo95B4WB47eCtPxZYljBBfW_PPQMiHpF/exec",                   // paste the Google Apps Script Web app URL (ends in /exec) to grey out taken times; leave empty to skip
   daysAhead: 60,                     // how many days ahead people can book (always counted from today, so it never runs out)
   // Your weekly availability: 0=Sun ... 6=Sat. Remove or add times freely.
   slots: {
@@ -289,11 +292,29 @@ function renderDays(){
 }
 $("prevDays").onclick=()=>{if(page>0){page--;renderDays();}};
 $("nextDays").onclick=()=>{if((page+1)*PER_PAGE<allDays.length){page++;renderDays();}};
+let booked = {};
+async function loadBooked(){
+  if(!CONFIG.bookingsUrl) return;
+  const ctl=new AbortController(), t=setTimeout(()=>ctl.abort(),9000);
+  try{
+    const r=await fetch(CONFIG.bookingsUrl,{signal:ctl.signal});
+    const j=await r.json(), m={};
+    (j.booked||[]).forEach(x=>{(m[x.date]=m[x.date]||[]).push(x.time);});
+    booked=m;
+    if(chosenDate){
+      if(chosenTime && isTaken(chosenDate,chosenTime)) chosenTime=null;
+      renderTimes(chosenDate); updateSummary();
+    }
+  }catch(e){}                       // if it fails, all times simply show as open
+  finally{clearTimeout(t);}
+}
+function isTaken(d,t){return (booked[iso(d)]||[]).includes(t);}
 function renderTimes(d){
   const box = $("times"); box.innerHTML = "";
   CONFIG.slots[d.getDay()].forEach(t=>{
     const b = document.createElement("button");
     b.type="button"; b.className="chip"; b.textContent=t; b.setAttribute("aria-pressed","false");
+    if(isTaken(d,t)){b.disabled=true; b.title="Already booked"; b.setAttribute("aria-label",t+", already booked"); box.appendChild(b); return;}
     b.onclick = () => {
       box.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed","false"));
       b.setAttribute("aria-pressed","true"); chosenTime = t; updateSummary();
@@ -464,6 +485,18 @@ $("send").onclick = async () => {
   const btn=$("send"), label=btn.textContent;
   btn.disabled=true; btn.textContent="Sending...";
   const w=window.open("","_blank");           // opened now so the browser allows it; filled in below
+  if(CONFIG.bookingsUrl){
+    const saved=await saveBooking(name,phone);
+    if(saved==="taken"||saved==="limit"){
+      if(w) w.close();
+      btn.disabled=false; btn.textContent=label;
+      if(saved==="taken"){
+        err.textContent="Sorry, that time was just booked by someone else. Please choose another time.";
+        chosenTime=null; await loadBooked(); renderTimes(chosenDate); updateSummary();
+      } else err.textContent="You already have the maximum number of upcoming sessions requested. Please message me on WhatsApp to change one.";
+      return;
+    }
+  }
   let emailed=false;
   if(CONFIG.web3formsKey){
     emailed=await sendEmail((flagged?"[SAFETY FLAG] ":"")+"Assessment results: "+name+", "+prettyDate(chosenDate)+" "+chosenTime,
@@ -476,6 +509,17 @@ $("send").onclick = async () => {
   if(w && !w.closed){w.location.href=url;} else {window.location.href=url;}
   btn.disabled=false; btn.textContent=label;
 };
+async function saveBooking(name,phone){
+  const ctl=new AbortController(), t=setTimeout(()=>ctl.abort(),12000);
+  try{
+    const resp=await fetch(CONFIG.bookingsUrl,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify({date:iso(chosenDate),time:chosenTime,name:name,phone:phone.replace(/[\s\-()]/g,""),hp:""}),signal:ctl.signal});
+    const j=await resp.json();
+    if(j.ok) return "ok";
+    return (j.error==="taken"||j.error==="limit")?j.error:"error";
+  }catch(e){return "error";}              // network trouble: carry on with WhatsApp so the request is never lost
+  finally{clearTimeout(t);}
+}
 async function sendEmail(subject,message,name,email){
   const body={access_key:CONFIG.web3formsKey,subject:subject,from_name:"Counselling website",name:name,message:message,botcheck:""};
   if(email) body.email=email;
@@ -491,7 +535,7 @@ if(CONFIG.web3formsKey){
   $("noteTxt").textContent="Your booking request opens in WhatsApp so you can send it to me directly. Your assessment answers are emailed to me through a form service (Web3Forms) and are not sent in WhatsApp. Everything you share stays confidential. This service is support and counselling, not emergency care. If you are in crisis, call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours, India) or your local emergency number.";
 }
 $("contactline").innerHTML = 'Email: <a href="mailto:'+CONFIG.email+'">'+CONFIG.email+'</a>';
-buildDays(); renderDays(); renderAssess();
+buildDays(); renderDays(); renderAssess(); loadBooked();
 </script>
 </body>
 </html>
