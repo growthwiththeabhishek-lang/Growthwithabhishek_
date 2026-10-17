@@ -66,8 +66,11 @@ nav a:hover{color:var(--ink)}
 .price{font:500 1.15rem var(--sans);color:var(--ink);margin:14px 0 0}
 .book .info p{color:var(--muted);margin-bottom:10px}
 .card{background:var(--white);border-radius:28px;padding:30px}
-.card h3{margin:22px 0 10px}
-.card h3:first-child{margin-top:0}
+[hidden]{display:none!important}
+.card h3{margin:0 0 12px}
+.card h3.step{display:flex;align-items:center;gap:10px;font-size:1.1rem;margin:28px 0 12px;padding-top:24px;border-top:1px solid var(--line)}
+.card h3.step:first-child{margin-top:0;padding-top:0;border-top:0}
+.num{flex:none;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--sage);color:var(--teal);font:700 .88rem var(--sans)}
 .days,.times{display:flex;flex-wrap:wrap;gap:10px}
 .chip{border:1.5px solid var(--line);background:transparent;color:var(--ink);border-radius:14px;padding:10px 14px;font:500 .95rem var(--sans);cursor:pointer;text-align:center;min-width:76px}
 .chip small{display:block;color:var(--muted);font-size:.78rem}
@@ -88,27 +91,35 @@ textarea{min-height:84px;resize:vertical}
 .btn-assess{display:block;width:100%;margin-top:10px;background:transparent;border:1.5px solid var(--teal);color:var(--teal);font:600 1rem var(--sans);padding:13px 18px;border-radius:999px;cursor:pointer;text-align:center}
 .btn-assess:hover{background:var(--sage)}
 .btn-assess.done{background:var(--sage)}
-#assessWrap{margin-top:6px}
-.assess-intro{color:var(--muted);font-size:.95rem;margin-bottom:6px}
-.scale-title{font:400 1.05rem var(--serif);margin:22px 0 2px}
-.scale-intro{color:var(--muted);font-size:.92rem;margin-bottom:4px}
-.q{border:0;padding:10px 0 10px 10px;margin:6px 0;border-left:3px solid transparent}
+#assessWrap{margin-top:14px;background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:18px 18px 20px}
+.progress{height:6px;background:var(--line);border-radius:999px;overflow:hidden}
+.progress div{height:100%;width:0;background:var(--teal);border-radius:999px;transition:width .25s}
+.part-label{font:700 .8rem var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin:12px 0 0}
+.assess-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px}
+.btn-next{background:var(--teal);color:#fff;border:0;border-radius:999px;font:600 .98rem var(--sans);padding:11px 26px;cursor:pointer}
+.btn-next:hover{opacity:.92}
+.aerr{color:#B3402E;font-weight:500;font-size:.92rem;margin-top:10px;min-height:1.2em}
+.assess-intro{color:var(--muted);font-size:.95rem;margin:0 0 4px}
+.scale-title{font:400 1.2rem var(--serif);margin:6px 0 2px}
+.scale-intro{color:var(--muted);font-size:.92rem;margin:0 0 6px}
+.q{border:0;padding:16px 0 16px 12px;margin:0;border-top:1px solid var(--line);border-left:3px solid transparent}
+.scale-intro+.q,.scale-title+.q{border-top:0}
 .q.missing{border-left-color:#B3402E}
-.q legend{font-weight:500;padding:0;margin-bottom:8px;max-width:none}
-.opts{display:flex;flex-wrap:wrap;gap:8px}
-.opt{position:relative;display:inline-block;margin:0;font-weight:500;font-size:.9rem}
+.q legend{font-weight:500;font-size:1rem;line-height:1.45;padding:0;margin-bottom:10px;max-width:none}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px}
+.opt{position:relative;display:block;margin:0;font-weight:500;font-size:.88rem}
 .opt input{position:absolute;opacity:0;width:0;height:0;padding:0;border:0;margin:0}
-.opt span{display:inline-block;border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;cursor:pointer;background:transparent}
+.opt span{display:block;text-align:center;line-height:1.3;border:1.5px solid var(--line);border-radius:12px;padding:10px 8px;cursor:pointer;background:var(--white)}
 .opt:hover span{border-color:var(--teal)}
 .opt input:checked+span{background:var(--teal);border-color:var(--teal);color:#fff}
 .opt input:focus-visible+span{outline:3px solid var(--teal);outline-offset:2px}
 .crisis{margin-top:10px;padding:14px 16px;background:var(--peach);border-radius:14px;font-weight:500}
-.consent{display:flex;gap:10px;align-items:flex-start;font-weight:500;margin:20px 0 0}
+.consent{display:flex;gap:10px;align-items:flex-start;font-weight:500;font-size:.92rem;margin:18px 0 0;padding-top:16px;border-top:1px solid var(--line)}
 .consent input{width:auto;margin-top:5px;flex:none}
 .summary{margin-top:20px;padding:14px 16px;background:var(--sage);border-radius:14px;font-weight:500}
 .err{color:#B3402E;font-weight:500;margin-top:10px;min-height:1.4em}
 .card .btn{margin-top:12px;width:100%}
-.note{font-size:.88rem;color:var(--muted);margin-top:14px}
+.note{font-size:.82rem;line-height:1.55;color:var(--muted);margin-top:16px}
 footer{padding:36px 0;text-align:center;color:var(--muted);font-size:.9rem}
 footer p{margin:6px auto}
 @media (max-width:860px){
@@ -139,7 +150,9 @@ footer p{margin:6px auto}
   .card{padding:22px 16px;border-radius:22px}
   .chip{min-width:70px;padding:10px 10px}
   .edu-box{padding:24px 22px 10px}
-  .opt span{padding:9px 12px}
+  .opt span{padding:10px 6px}
+  #assessWrap{padding:16px 12px 18px}
+  .opts{grid-template-columns:repeat(auto-fit,minmax(104px,1fr))}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
@@ -200,25 +213,29 @@ footer p{margin:6px auto}
   </div>
 
   <div class="card">
-    <h3>1. Pick a Day</h3>
+    <h3 class="step"><span class="num">1</span>Pick a Day</h3>
     <div class="days" id="days"></div>
     <div class="pager"><button type="button" class="pg" id="prevDays" aria-label="Earlier days">&larr; Earlier</button><button type="button" class="pg" id="nextDays" aria-label="Later days">Later &rarr;</button></div>
-    <h3>2. Pick a Time</h3>
+    <h3 class="step"><span class="num">2</span>Pick a Time</h3>
     <div class="times" id="times"><span class="hint">Choose a day to see available times.</span></div>
-    <h3>3. Your Details</h3>
+    <h3 class="step"><span class="num">3</span>Your Details</h3>
     <div class="row2">
       <div><label for="name">Name</label><input id="name" autocomplete="name"></div>
       <div><label for="phone">Phone</label><input id="phone" type="tel" autocomplete="tel"></div>
     </div>
     <label for="email">Email (for your confirmation and session link)</label><input id="email" type="email" autocomplete="email">
     <label for="msg">What would you like support with? (optional)</label><textarea id="msg"></textarea>
-    <h3>4. A Short Assessment</h3>
-    <p class="assess-intro">A few quick questions help me understand how you've been feeling, so our first session can start where you are. It takes about 4 minutes, and there are no right or wrong answers.</p>
+    <h3 class="step"><span class="num">4</span>A Short Assessment</h3>
+    <p class="assess-intro">A few quick questions so our first session can start where you are. About 4 minutes, and there are no right or wrong answers.</p>
     <button type="button" class="btn-assess" id="assessBtn" aria-expanded="false" aria-controls="assessWrap">Take the Short Assessment</button>
     <div class="crisis" id="crisis" role="alert" hidden>Thank you for telling me. You don't have to wait for a session. Please call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours), or go to your nearest emergency room. You can still send your request below.</div>
     <div id="assessWrap" hidden>
+      <div class="progress" aria-hidden="true"><div id="pbar"></div></div>
+      <p class="part-label" id="partLabel" aria-live="polite"></p>
       <div id="assess"></div>
-      <label class="consent"><input type="checkbox" id="consent"><span id="consentTxt">I agree to share my answers with Abhishek by WhatsApp so he can prepare for our session.</span></label>
+      <div class="aerr" id="aErr" role="alert"></div>
+      <div class="assess-nav"><button type="button" class="pg" id="aBack">&larr; Back</button><button type="button" class="btn-next" id="aNext">Next &rarr;</button></div>
+      <label class="consent" id="consentRow" hidden><input type="checkbox" id="consent"><span id="consentTxt">I agree to share my answers with Abhishek by WhatsApp so he can prepare for our session.</span></label>
     </div>
     <div class="summary" id="summary" hidden></div>
     <div class="err" id="err" role="alert"></div>
@@ -348,9 +365,9 @@ const ASSESS=[
 function renderAssess(){
   const box=$("assess");
   ASSESS.forEach(sc=>{
-    const t=document.createElement("div");
-    t.innerHTML='<p class="scale-title">'+sc.title+'</p>'+(sc.intro?'<p class="scale-intro">'+sc.intro+'</p>':'');
-    box.appendChild(t);
+    const sec=document.createElement("div"); sec.className="scale-sec";
+    sec.innerHTML='<p class="scale-title">'+sc.title+'</p>'+(sc.intro?'<p class="scale-intro">'+sc.intro+'</p>':'');
+    box.appendChild(sec);
     sc.items.forEach((txt,k)=>{
       const f=document.createElement("fieldset"); f.className="q"; f.id="q_"+sc.id+"_"+k;
       const lg=document.createElement("legend"); lg.textContent=txt; f.appendChild(lg);
@@ -362,7 +379,7 @@ function renderAssess(){
         const sp=document.createElement("span"); sp.textContent=label;
         l.appendChild(r); l.appendChild(sp); o.appendChild(l);
       });
-      f.appendChild(o); box.appendChild(f);
+      f.appendChild(o); sec.appendChild(f);
     });
   });
 }
@@ -373,11 +390,35 @@ function updateAssessBtn(){
   const btn=$("assessBtn"), open=!$("assessWrap").hidden, n=answeredCount();
   btn.setAttribute("aria-expanded",open?"true":"false");
   btn.classList.toggle("done",n===TOTAL_Q);
-  btn.textContent = open ? "Assessment: "+n+" of "+TOTAL_Q+" answered (tap to hide)"
-    : n===0 ? "Take the Short Assessment"
+  btn.textContent = open ? "Hide assessment ("+n+" of "+TOTAL_Q+" answered)"
+    : n===0 ? "Start the Short Assessment"
     : n===TOTAL_Q ? "Assessment complete \u2713 (tap to review)"
-    : "Assessment: "+n+" of "+TOTAL_Q+" answered (tap to continue)";
+    : "Continue assessment ("+n+" of "+TOTAL_Q+" answered)";
 }
+let curSec=0;
+function secs(){return document.querySelectorAll("#assess .scale-sec");}
+function secIndexOf(id){return Array.prototype.findIndex.call(secs(),s=>s.contains($(id)));}
+function showSec(i){
+  const S=secs(); if(!S.length) return;
+  curSec=Math.max(0,Math.min(S.length-1,i));
+  S.forEach((s,k)=>{s.hidden=(k!==curSec);});
+  $("partLabel").textContent="Part "+(curSec+1)+" of "+S.length;
+  $("pbar").style.width=Math.round((curSec+1)/S.length*100)+"%";
+  $("aBack").disabled=(curSec===0);
+  const last=(curSec===S.length-1);
+  $("aNext").hidden=last; $("consentRow").hidden=!last; $("aErr").textContent="";
+}
+$("aBack").onclick=()=>{showSec(curSec-1); $("assessWrap").scrollIntoView({behavior:"smooth",block:"start"});};
+$("aNext").onclick=()=>{
+  const qs=Array.prototype.slice.call(secs()[curSec].querySelectorAll(".q"));
+  const miss=qs.filter(q=>!q.querySelector("input:checked"));
+  qs.forEach(q=>q.classList.toggle("missing",miss.indexOf(q)>-1));
+  if(miss.length){
+    $("aErr").textContent="Please answer the highlighted "+(miss.length>1?"questions":"question")+" to continue.";
+    miss[0].scrollIntoView({behavior:"smooth",block:"center"}); return;
+  }
+  showSec(curSec+1); $("assessWrap").scrollIntoView({behavior:"smooth",block:"start"});
+};
 function openAssess(){$("assessWrap").hidden=false; updateAssessBtn();}
 $("assessBtn").onclick=()=>{$("assessWrap").hidden=!$("assessWrap").hidden; updateAssessBtn();};
 $("assess").addEventListener("change",updateAssessBtn);
@@ -459,7 +500,7 @@ function interpret(res){
   const sf=res.safe[0];
   const safe=sf===1?"*SAFETY: answered YES to thoughts of ending life or self-harm. Please follow up soon.*":sf===2?"Safety question: preferred not to say.":"Safety question: answered No.";
   const summary=buildSummary(res,{spin,gad,who,ros,rscored});
-  return {safe,summary,lines:L,items:{spin:res.spin,gad:res.gad,who:res.who,rses:res.rses}};
+  return {safe,summary,lines:L,scores:{spin,gad,who,ros,sf},items:{spin:res.spin,gad:res.gad,who:res.who,rses:res.rses}};
 }
 $("send").onclick = async () => {
   const name=$("name").value.trim(), phone=$("phone").value.trim(), email=$("email").value.trim(), msg=$("msg").value.trim();
@@ -469,12 +510,12 @@ $("send").onclick = async () => {
   if(CONFIG.bookingsUrl && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent="Please add a valid email so I can send your confirmation and session link."; return;}
   const {res,missing}=readAssess();
   if(missing.length){
-    openAssess();
+    openAssess(); showSec(secIndexOf(missing[0]));
     document.querySelectorAll(".q").forEach(q=>q.classList.toggle("missing",missing.includes(q.id)));
     err.textContent="Please answer all the questions ("+missing.length+" left).";
     $(missing[0]).scrollIntoView({behavior:"smooth",block:"center"}); return;
   }
-  if(!$("consent").checked){openAssess(); err.textContent="Please tick the box to agree to share your answers."; $("consent").scrollIntoView({behavior:"smooth",block:"center"}); return;}
+  if(!$("consent").checked){openAssess(); showSec(secs().length-1); err.textContent="Please tick the box to agree to share your answers."; $("consent").scrollIntoView({behavior:"smooth",block:"center"}); return;}
   const r=interpret(res), flagged=res.safe[0]===1;
   const details="Date: "+prettyDate(chosenDate)+"\nTime: "+chosenTime+"\nSession fee: "+CONFIG.price+"\nName: "+name+"\nPhone: "+phone+(email?"\nEmail: "+email:"")+(msg?"\nSupport needed: "+msg:"");
   const assess="*Pre-session questionnaire* (self-report screening, not a diagnosis)\n"+r.safe+
@@ -487,7 +528,9 @@ $("send").onclick = async () => {
   const w=window.open("","_blank");           // opened now so the browser allows it; filled in below
   let saved="", emailed=false;
   if(CONFIG.bookingsUrl){
-    const out=await saveBooking(name,phone,details,assess,flagged);
+    const report={safety:r.scores.sf,spin:r.scores.spin,gad:r.scores.gad,who:r.scores.who,ros:r.scores.ros,
+      summary:r.summary.filter(x=>x.indexOf("- ")===0),items:r.items};
+    const out=await saveBooking(name,phone,details,assess,flagged,report);
     saved=out.status; emailed=out.emailed;
     if(saved==="taken"||saved==="limit"){
       if(w) w.close();
@@ -506,12 +549,12 @@ $("send").onclick = async () => {
   if(w && !w.closed){w.location.href=url;} else {window.location.href=url;}
   btn.disabled=false; btn.textContent=label;
 };
-async function saveBooking(name,phone,details,assess,flagged){
+async function saveBooking(name,phone,details,assess,flagged,report){
   const ctl=new AbortController(), t=setTimeout(()=>ctl.abort(),15000);
   try{
     const resp=await fetch(CONFIG.bookingsUrl,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
       body:JSON.stringify({date:iso(chosenDate),time:chosenTime,name:name,phone:phone.replace(/[\s\-()]/g,""),email:$("email").value.trim(),
-        details:details,assessment:assess,flagged:flagged,hp:""}),signal:ctl.signal});
+        details:details,assessment:assess,flagged:flagged,report:report,hp:""}),signal:ctl.signal});
     const j=await resp.json();
     if(j.ok) return {status:"ok",emailed:!!j.emailed};
     return {status:(j.error==="taken"||j.error==="limit")?j.error:"error",emailed:false};
@@ -523,7 +566,7 @@ if(CONFIG.bookingsUrl){
   $("noteTxt").textContent="Your booking request opens in WhatsApp so you can send it to me directly. Your assessment answers are sent privately to my own email and are not sent in WhatsApp. Your name, phone, email, date and time are saved in my private booking sheet so I can confirm your session and send you the session link. Everything you share stays confidential. This service is support and counselling, not emergency care. If you are in crisis, call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours, India) or your local emergency number.";
 }
 $("contactline").innerHTML = 'Email: <a href="mailto:'+CONFIG.email+'">'+CONFIG.email+'</a>';
-buildDays(); renderDays(); renderAssess(); loadBooked();
+buildDays(); renderDays(); renderAssess(); showSec(0); loadBooked();
 </script>
 </body>
 </html>
