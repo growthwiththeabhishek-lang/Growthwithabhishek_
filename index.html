@@ -210,7 +210,7 @@ footer p{margin:6px auto}
       <div><label for="name">Name</label><input id="name" autocomplete="name"></div>
       <div><label for="phone">Phone</label><input id="phone" type="tel" autocomplete="tel"></div>
     </div>
-    <label for="email">Email</label><input id="email" type="email" autocomplete="email">
+    <label for="email">Email (for your confirmation and session link)</label><input id="email" type="email" autocomplete="email">
     <label for="msg">What would you like support with? (optional)</label><textarea id="msg"></textarea>
     <h3>4. A Short Assessment</h3>
     <p class="assess-intro">A few quick questions help me understand how you've been feeling, so our first session can start where you are. It takes about 4 minutes, and there are no right or wrong answers.</p>
@@ -223,7 +223,7 @@ footer p{margin:6px auto}
     <div class="summary" id="summary" hidden></div>
     <div class="err" id="err" role="alert"></div>
     <button class="btn" id="send" type="button">Request This Session</button>
-    <p class="note" id="noteTxt">Your request and answers open in WhatsApp so you can send them to me directly. They are not stored on this website. Everything you share stays confidential. This service is support and counselling, not emergency care. If you are in crisis, call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours, India) or your local emergency number.</p>
+    <p class="note" id="noteTxt">Your request and answers open in WhatsApp so you can send them to me directly. Your name, phone, email, date and time are saved in my private booking sheet so I can confirm your session. Your assessment answers are not saved there. Everything you share stays confidential. This service is support and counselling, not emergency care. If you are in crisis, call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours, India) or your local emergency number.</p>
   </div>
 </div></section>
 </main>
@@ -467,6 +467,7 @@ $("send").onclick = async () => {
   const err=$("err"); err.textContent="";
   if(!chosenDate || !chosenTime){err.textContent="Please choose a day and a time."; return;}
   if(!name || !phone){err.textContent="Please add your name and phone number."; return;}
+  if(CONFIG.bookingsUrl && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent="Please add a valid email so I can send your confirmation and session link."; return;}
   const {res,missing}=readAssess();
   if(missing.length){
     openAssess();
@@ -513,7 +514,7 @@ async function saveBooking(name,phone){
   const ctl=new AbortController(), t=setTimeout(()=>ctl.abort(),12000);
   try{
     const resp=await fetch(CONFIG.bookingsUrl,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
-      body:JSON.stringify({date:iso(chosenDate),time:chosenTime,name:name,phone:phone.replace(/[\s\-()]/g,""),hp:""}),signal:ctl.signal});
+      body:JSON.stringify({date:iso(chosenDate),time:chosenTime,name:name,phone:phone.replace(/[\s\-()]/g,""),email:$("email").value.trim(),hp:""}),signal:ctl.signal});
     const j=await resp.json();
     if(j.ok) return "ok";
     return (j.error==="taken"||j.error==="limit")?j.error:"error";
@@ -532,7 +533,7 @@ async function sendEmail(subject,message,name,email){
 }
 if(CONFIG.web3formsKey){
   $("consentTxt").textContent="I agree to share my booking details with Abhishek by WhatsApp, and my assessment answers by email, so he can prepare for our session.";
-  $("noteTxt").textContent="Your booking request opens in WhatsApp so you can send it to me directly. Your assessment answers are emailed to me through a form service (Web3Forms) and are not sent in WhatsApp. Everything you share stays confidential. This service is support and counselling, not emergency care. If you are in crisis, call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours, India) or your local emergency number.";
+  $("noteTxt").textContent="Your booking request opens in WhatsApp so you can send it to me directly. Your assessment answers are emailed to me through a form service (Web3Forms) and are not sent in WhatsApp. Your name, phone, email, date and time are also saved in my private booking sheet so I can confirm your session and send you the session link. Everything you share stays confidential. This service is support and counselling, not emergency care. If you are in crisis, call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours, India) or your local emergency number.";
 }
 $("contactline").innerHTML = 'Email: <a href="mailto:'+CONFIG.email+'">'+CONFIG.email+'</a>';
 buildDays(); renderDays(); renderAssess(); loadBooked();
