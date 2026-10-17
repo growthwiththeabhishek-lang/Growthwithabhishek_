@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Abhishek Prajapati | Counsellor &amp; Mental Health Advocate</title>
+<title>Growth by Abhishek Prajapati | Counsellor &amp; Mental Health Advocate</title>
 <meta name="description" content="Calm, private counselling support in Indore for social nervousness, anxiety, clarity, emotional well-being and self-esteem. Book a session online.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +33,11 @@ section,#top{scroll-margin-top:72px}
 :focus-visible{outline:3px solid var(--teal);outline-offset:3px}
 header{position:sticky;top:0;z-index:20;padding:14px 0;background:rgba(249,250,247,.95);backdrop-filter:blur(8px)}
 header .wrap{display:flex;justify-content:space-between;align-items:center}
-.logo{font-family:var(--serif);font-size:1.2rem;text-decoration:none}
+.logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.logo-mark{flex:none}
+.logo-text{display:flex;flex-direction:column;line-height:1.05}
+.logo-main{font-family:var(--serif);font-size:1.5rem;letter-spacing:.01em}
+.logo-by{font:500 .72rem var(--sans);letter-spacing:.06em;color:var(--muted);margin-top:3px}
 nav a{margin-left:22px;text-decoration:none;color:var(--muted);font-weight:500}
 nav a:hover{color:var(--ink)}
 .hero{padding:70px 0 90px}
@@ -66,20 +70,42 @@ nav a:hover{color:var(--ink)}
 .price{font:500 1.15rem var(--sans);color:var(--ink);margin:14px 0 0}
 .book .info p{color:var(--muted);margin-bottom:10px}
 .card{background:var(--white);border-radius:28px;padding:30px}
-[hidden]{display:none!important}
-.card h3{margin:0 0 12px}
-.card h3.step{display:flex;align-items:center;gap:10px;font-size:1.1rem;margin:28px 0 12px;padding-top:24px;border-top:1px solid var(--line)}
-.card h3.step:first-child{margin-top:0;padding-top:0;border-top:0}
-.num{flex:none;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--sage);color:var(--teal);font:700 .88rem var(--sans)}
+.card h3{margin:22px 0 10px}
+.card h3:first-child{margin-top:0}
 .days,.times{display:flex;flex-wrap:wrap;gap:10px}
 .chip{border:1.5px solid var(--line);background:transparent;color:var(--ink);border-radius:14px;padding:10px 14px;font:500 .95rem var(--sans);cursor:pointer;text-align:center;min-width:76px}
 .chip small{display:block;color:var(--muted);font-size:.78rem}
 .chip:hover{border-color:var(--teal)}
-.chip:disabled{color:#A9B7B5;background:#EEF2F1;border-style:dashed;cursor:not-allowed;text-decoration:line-through}
-.chip:disabled:hover{border-color:var(--line)}
 .chip[aria-pressed=true]{background:var(--teal);border-color:var(--teal);color:#fff}
 .chip[aria-pressed=true] small{color:#D6EBEC}
+.chip:disabled,.chip.booked{background:#EEF0EE;border-color:#E3E8E6;color:#9AA7A5;cursor:not-allowed;text-decoration:line-through}
+.chip:disabled small,.chip.booked small{color:#9AA7A5;text-decoration:none}
+.chip:disabled:hover{border-color:#E3E8E6}
 .hint{color:var(--muted);font-size:.95rem}
+.fab{display:none}
+@media (max-width:860px){
+  .fab{display:block;position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;transform:translate(-50%,16px);
+    background:var(--apricot);color:#22393A;font:600 1rem var(--sans);padding:14px 28px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    box-shadow:0 8px 24px rgba(31,58,68,.25);opacity:0;visibility:hidden;transition:opacity .25s,transform .25s,visibility .25s}
+  .fab.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+  footer{padding-bottom:96px}
+  nav a.keep{transition:opacity .25s}
+  body.fab-on nav a.keep{opacity:0;pointer-events:none}
+}
+@media (prefers-reduced-motion:reduce){.fab{transition:none}}
+.strip{padding:0 0 24px;overflow:hidden}
+.strip-view{overflow:hidden}
+.strip-track{display:flex;gap:16px;width:max-content;animation:stripMove 70s linear infinite}
+.strip.paused .strip-track{animation-play-state:paused}
+@keyframes stripMove{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.shot{position:relative;flex:none;width:210px;height:290px;border-radius:22px;overflow:hidden;background:var(--sage)}
+.shot:nth-child(odd){border-radius:105px 105px 22px 22px}
+.shot svg,.shot img{width:100%;height:100%;display:block;object-fit:cover}
+.shot figcaption{position:absolute;left:12px;right:12px;bottom:18px;text-align:center;font:400 1.1rem var(--serif);line-height:1.2;color:var(--ink)}
+.shot.light figcaption{color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.25)}
+.strip-ctl{display:flex;justify-content:flex-end;margin-top:6px}
+@media (max-width:520px){.shot{width:150px;height:210px}.shot:nth-child(odd){border-radius:75px 75px 18px 18px}.shot figcaption{font-size:.95rem;bottom:12px}}
+@media (prefers-reduced-motion:reduce){.strip-track{animation:none}.strip-view{overflow-x:auto}.strip-ctl{display:none}}
 .pager{display:flex;justify-content:space-between;margin-top:10px}
 .pg{background:transparent;border:0;color:var(--teal);font:600 .92rem var(--sans);cursor:pointer;padding:6px 2px}
 .pg:disabled{color:var(--line);cursor:default}
@@ -91,35 +117,27 @@ textarea{min-height:84px;resize:vertical}
 .btn-assess{display:block;width:100%;margin-top:10px;background:transparent;border:1.5px solid var(--teal);color:var(--teal);font:600 1rem var(--sans);padding:13px 18px;border-radius:999px;cursor:pointer;text-align:center}
 .btn-assess:hover{background:var(--sage)}
 .btn-assess.done{background:var(--sage)}
-#assessWrap{margin-top:14px;background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:18px 18px 20px}
-.progress{height:6px;background:var(--line);border-radius:999px;overflow:hidden}
-.progress div{height:100%;width:0;background:var(--teal);border-radius:999px;transition:width .25s}
-.part-label{font:700 .8rem var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin:12px 0 0}
-.assess-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px}
-.btn-next{background:var(--teal);color:#fff;border:0;border-radius:999px;font:600 .98rem var(--sans);padding:11px 26px;cursor:pointer}
-.btn-next:hover{opacity:.92}
-.aerr{color:#B3402E;font-weight:500;font-size:.92rem;margin-top:10px;min-height:1.2em}
-.assess-intro{color:var(--muted);font-size:.95rem;margin:0 0 4px}
-.scale-title{font:400 1.2rem var(--serif);margin:6px 0 2px}
-.scale-intro{color:var(--muted);font-size:.92rem;margin:0 0 6px}
-.q{border:0;padding:16px 0 16px 12px;margin:0;border-top:1px solid var(--line);border-left:3px solid transparent}
-.scale-intro+.q,.scale-title+.q{border-top:0}
+#assessWrap{margin-top:6px}
+.assess-intro{color:var(--muted);font-size:.95rem;margin-bottom:6px}
+.scale-title{font:400 1.05rem var(--serif);margin:22px 0 2px}
+.scale-intro{color:var(--muted);font-size:.92rem;margin-bottom:4px}
+.q{border:0;padding:10px 0 10px 10px;margin:6px 0;border-left:3px solid transparent}
 .q.missing{border-left-color:#B3402E}
-.q legend{font-weight:500;font-size:1rem;line-height:1.45;padding:0;margin-bottom:10px;max-width:none}
-.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px}
-.opt{position:relative;display:block;margin:0;font-weight:500;font-size:.88rem}
+.q legend{font-weight:500;padding:0;margin-bottom:8px;max-width:none}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{position:relative;display:inline-block;margin:0;font-weight:500;font-size:.9rem}
 .opt input{position:absolute;opacity:0;width:0;height:0;padding:0;border:0;margin:0}
-.opt span{display:block;text-align:center;line-height:1.3;border:1.5px solid var(--line);border-radius:12px;padding:10px 8px;cursor:pointer;background:var(--white)}
+.opt span{display:inline-block;border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;cursor:pointer;background:transparent}
 .opt:hover span{border-color:var(--teal)}
 .opt input:checked+span{background:var(--teal);border-color:var(--teal);color:#fff}
 .opt input:focus-visible+span{outline:3px solid var(--teal);outline-offset:2px}
 .crisis{margin-top:10px;padding:14px 16px;background:var(--peach);border-radius:14px;font-weight:500}
-.consent{display:flex;gap:10px;align-items:flex-start;font-weight:500;font-size:.92rem;margin:18px 0 0;padding-top:16px;border-top:1px solid var(--line)}
+.consent{display:flex;gap:10px;align-items:flex-start;font-weight:500;margin:20px 0 0}
 .consent input{width:auto;margin-top:5px;flex:none}
 .summary{margin-top:20px;padding:14px 16px;background:var(--sage);border-radius:14px;font-weight:500}
 .err{color:#B3402E;font-weight:500;margin-top:10px;min-height:1.4em}
 .card .btn{margin-top:12px;width:100%}
-.note{font-size:.82rem;line-height:1.55;color:var(--muted);margin-top:16px}
+.note{font-size:.88rem;color:var(--muted);margin-top:14px}
 footer{padding:36px 0;text-align:center;color:var(--muted);font-size:.9rem}
 footer p{margin:6px auto}
 @media (max-width:860px){
@@ -130,7 +148,10 @@ footer p{margin:6px auto}
   .photo{max-width:340px}
   nav a:not(.keep){display:none}
   header .wrap{flex-wrap:nowrap;gap:12px}
-  .logo{font-size:1.05rem;white-space:nowrap}
+  .logo{white-space:nowrap;gap:8px}
+  .logo-main{font-size:1.3rem}
+  .logo-by{font-size:.66rem;letter-spacing:.04em}
+  .logo-mark{width:26px;height:26px}
   nav a.keep{margin-left:0;display:inline-block;white-space:nowrap;background:var(--apricot);color:#22393A;font-weight:600;font-size:.9rem;padding:9px 16px;border-radius:999px}
   section{padding:56px 0}
 }
@@ -150,9 +171,12 @@ footer p{margin:6px auto}
   .card{padding:22px 16px;border-radius:22px}
   .chip{min-width:70px;padding:10px 10px}
   .edu-box{padding:24px 22px 10px}
-  .opt span{padding:10px 6px}
-  #assessWrap{padding:16px 12px 18px}
-  .opts{grid-template-columns:repeat(auto-fit,minmax(104px,1fr))}
+  .opt span{padding:9px 12px}
+}
+@media (max-width:360px){
+  .logo{gap:6px}.logo-mark{width:22px;height:22px}.logo-main{font-size:1.15rem}.logo-by{font-size:.58rem;letter-spacing:.02em}
+  nav a.keep{padding:8px 12px;font-size:.82rem}
+  header .wrap{gap:8px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
@@ -160,7 +184,10 @@ footer p{margin:6px auto}
 <body>
 
 <header><div class="wrap">
-  <a class="logo" href="#top">Abhishek Prajapati</a>
+  <a class="logo" href="#top" aria-label="Growth by Abhishek Prajapati, back to top">
+    <svg class="logo-mark" viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><path d="M16 29V15" stroke="#2A6F77" stroke-width="2.4" stroke-linecap="round" fill="none"/><path d="M16 16C16 9 11 5 4 5c0 7 4 11 12 11Z" fill="#2A6F77"/><path d="M16 12c0-5 4-8 11-8 0 6-3 9-11 9Z" fill="#F2A27C"/></svg>
+    <span class="logo-text"><span class="logo-main">Growth</span><span class="logo-by">by Abhishek Prajapati</span></span>
+  </a>
   <nav><a href="#focus">Support</a><a href="#about">About</a><a class="keep" href="#book">Book a Session</a></nav>
 </div></header>
 
@@ -175,6 +202,11 @@ footer p{margin:6px auto}
     <a class="btn ghost" href="#about">Meet Your Counsellor</a>
   </div>
 </div></section>
+
+<section class="strip" id="strip" aria-label="Calming images">
+  <div class="strip-view"><div class="strip-track" id="stripTrack"></div></div>
+  <div class="wrap strip-ctl"><button type="button" class="pg" id="stripBtn" aria-pressed="false">Pause motion</button></div>
+</section>
 
 <section class="focus" id="focus"><div class="wrap">
   <h2>What We Can Work On</h2>
@@ -213,29 +245,25 @@ footer p{margin:6px auto}
   </div>
 
   <div class="card">
-    <h3 class="step"><span class="num">1</span>Pick a Day</h3>
+    <h3>1. Pick a Day</h3>
     <div class="days" id="days"></div>
     <div class="pager"><button type="button" class="pg" id="prevDays" aria-label="Earlier days">&larr; Earlier</button><button type="button" class="pg" id="nextDays" aria-label="Later days">Later &rarr;</button></div>
-    <h3 class="step"><span class="num">2</span>Pick a Time</h3>
+    <h3>2. Pick a Time</h3>
     <div class="times" id="times"><span class="hint">Choose a day to see available times.</span></div>
-    <h3 class="step"><span class="num">3</span>Your Details</h3>
+    <h3>3. Your Details</h3>
     <div class="row2">
       <div><label for="name">Name</label><input id="name" autocomplete="name"></div>
       <div><label for="phone">Phone</label><input id="phone" type="tel" autocomplete="tel"></div>
     </div>
-    <label for="email">Email (for your confirmation and session link)</label><input id="email" type="email" autocomplete="email">
+    <label for="email">Email</label><input id="email" type="email" autocomplete="email">
     <label for="msg">What would you like support with? (optional)</label><textarea id="msg"></textarea>
-    <h3 class="step"><span class="num">4</span>A Short Assessment</h3>
-    <p class="assess-intro">A few quick questions so our first session can start where you are. About 4 minutes, and there are no right or wrong answers.</p>
+    <h3>4. A Short Assessment</h3>
+    <p class="assess-intro">A few quick questions help me understand how you've been feeling, so our first session can start where you are. It takes about 4 minutes, and there are no right or wrong answers.</p>
     <button type="button" class="btn-assess" id="assessBtn" aria-expanded="false" aria-controls="assessWrap">Take the Short Assessment</button>
     <div class="crisis" id="crisis" role="alert" hidden>Thank you for telling me. You don't have to wait for a session. Please call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours), or go to your nearest emergency room. You can still send your request below.</div>
     <div id="assessWrap" hidden>
-      <div class="progress" aria-hidden="true"><div id="pbar"></div></div>
-      <p class="part-label" id="partLabel" aria-live="polite"></p>
       <div id="assess"></div>
-      <div class="aerr" id="aErr" role="alert"></div>
-      <div class="assess-nav"><button type="button" class="pg" id="aBack">&larr; Back</button><button type="button" class="btn-next" id="aNext">Next &rarr;</button></div>
-      <label class="consent" id="consentRow" hidden><input type="checkbox" id="consent"><span id="consentTxt">I agree to share my answers with Abhishek by WhatsApp so he can prepare for our session.</span></label>
+      <label class="consent"><input type="checkbox" id="consent"><span id="consentTxt">I agree to share my answers with Abhishek by WhatsApp so he can prepare for our session.</span></label>
     </div>
     <div class="summary" id="summary" hidden></div>
     <div class="err" id="err" role="alert"></div>
@@ -244,20 +272,25 @@ footer p{margin:6px auto}
   </div>
 </div></section>
 </main>
+<a class="fab" id="fab" href="#book">Book a Session</a>
 
 <footer><div class="wrap">
-  <p>Abhishek Prajapati | Counsellor, Mental Health Advocate, Mental Health First Aider (USA)</p>
+  <p>Growth by Abhishek Prajapati | Counsellor, Mental Health Advocate, Mental Health First Aider (USA)</p>
   <p>Indore, Madhya Pradesh, India</p>
   <p id="contactline"></p>
 </div></footer>
 
+<script src="booked.js"></script>
 <script>
 /* ========= EDIT THIS SECTION ========= */
 const CONFIG = {
   whatsapp: "917987035065",          // country code + number, no + or spaces
   email: "growthwiththeabhishek@gmail.com",
   price: "₹499",
-  bookingsUrl: "https://script.google.com/macros/s/AKfycbxO49CC4GKU1g-YB6GkjRxyHvP8yz1fwgNfJo95B4WB47eCtPxZYljBBfW_PPQMiHpF/exec",                   // paste the Google Apps Script Web app URL (ends in /exec) to grey out taken times; leave empty to skip
+  web3formsKey: "051af225-423c-4492-ba93-26c4915aeb8b",                  // paste your free Web3Forms access key here to ALSO get every request by email (leave empty for WhatsApp only)
+  bookingsUrl: "",                   // Google Apps Script web app URL (see booking-backend.gs). Makes booked times turn grey for everyone, automatically
+  booked: [],                        // optional manual list of taken times, e.g. "2026-10-20 2:00 PM"
+  photos: [],                        // optional: your own images for the moving strip, e.g. ["photos/1.jpg","photos/2.jpg"]. Leave empty to use the built-in artwork
   daysAhead: 60,                     // how many days ahead people can book (always counted from today, so it never runs out)
   // Your weekly availability: 0=Sun ... 6=Sat. Remove or add times freely.
   slots: {
@@ -285,21 +318,32 @@ function buildDays(){
   const today=new Date();
   for(let i=1;i<=CONFIG.daysAhead;i++){
     const d=new Date(today.getFullYear(),today.getMonth(),today.getDate()+i);
-    if((CONFIG.slots[d.getDay()]||[]).length && !CONFIG.blocked.includes(iso(d))) allDays.push(d);
+    if((CONFIG.slots[d.getDay()]||[]).length && !CONFIG.blocked.includes(iso(d)) && !(window.BLOCKED_DATES||[]).includes(iso(d))) allDays.push(d);
   }
 }
+let serverBooked=[];
+function bookedMap(){
+  const m={}, add=(d,t)=>{(m[d]=m[d]||new Set()).add(t);};
+  (CONFIG.booked||[]).concat(window.BOOKED||[]).forEach(x=>{const k=x.indexOf(" "); if(k>0) add(x.slice(0,k).trim(),x.slice(k+1).trim());});
+  serverBooked.forEach(x=>add(x.date,x.time));
+  return m;
+}
+function isBooked(d,t){const m=bookedMap()[iso(d)]; return !!(m&&m.has(t));}
+function dayFull(d){return CONFIG.slots[d.getDay()].every(t=>isBooked(d,t));}
 function renderDays(){
   const box=$("days"); box.innerHTML="";
   allDays.slice(page*PER_PAGE,(page+1)*PER_PAGE).forEach(d=>{
     const b=document.createElement("button");
-    b.type="button"; b.className="chip";
-    const sel=chosenDate && iso(chosenDate)===iso(d);
+    const full=dayFull(d);
+    b.type="button"; b.className="chip"+(full?" booked":"");
+    const sel=!full && chosenDate && iso(chosenDate)===iso(d);
     b.setAttribute("aria-pressed",sel?"true":"false");
     b.innerHTML=dayNames[d.getDay()]+"<small>"+d.toLocaleDateString("en-IN",{day:"numeric",month:"short"})+"</small>";
+    if(full){b.disabled=true; b.title="Fully booked";}
     b.onclick=()=>{
       box.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed","false"));
       b.setAttribute("aria-pressed","true");
-      chosenDate=d; chosenTime=null; renderTimes(d); updateSummary();
+      chosenDate=d; chosenTime=null; renderTimes(d); updateSummary(); loadBooked();
     };
     box.appendChild(b);
   });
@@ -308,35 +352,40 @@ function renderDays(){
 }
 $("prevDays").onclick=()=>{if(page>0){page--;renderDays();}};
 $("nextDays").onclick=()=>{if((page+1)*PER_PAGE<allDays.length){page++;renderDays();}};
-let booked = {};
-async function loadBooked(){
-  if(!CONFIG.bookingsUrl) return;
-  const ctl=new AbortController(), t=setTimeout(()=>ctl.abort(),9000);
-  try{
-    const r=await fetch(CONFIG.bookingsUrl,{signal:ctl.signal});
-    const j=await r.json(), m={};
-    (j.booked||[]).forEach(x=>{(m[x.date]=m[x.date]||[]).push(x.time);});
-    booked=m;
-    if(chosenDate){
-      if(chosenTime && isTaken(chosenDate,chosenTime)) chosenTime=null;
-      renderTimes(chosenDate); updateSummary();
-    }
-  }catch(e){}                       // if it fails, all times simply show as open
-  finally{clearTimeout(t);}
-}
-function isTaken(d,t){return (booked[iso(d)]||[]).includes(t);}
 function renderTimes(d){
-  const box = $("times"); box.innerHTML = "";
+  const box=$("times"); box.innerHTML="";
   CONFIG.slots[d.getDay()].forEach(t=>{
-    const b = document.createElement("button");
-    b.type="button"; b.className="chip"; b.textContent=t; b.setAttribute("aria-pressed","false");
-    if(isTaken(d,t)){b.disabled=true; b.title="Already booked"; b.setAttribute("aria-label",t+", already booked"); box.appendChild(b); return;}
-    b.onclick = () => {
+    const b=document.createElement("button"), taken=isBooked(d,t);
+    b.type="button"; b.className="chip"+(taken?" booked":"");
+    b.innerHTML=t+(taken?"<small>Booked</small>":"");
+    b.setAttribute("aria-pressed",(!taken && chosenTime===t)?"true":"false");
+    if(taken){b.disabled=true; b.title="Already booked";}
+    b.onclick=()=>{
       box.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed","false"));
-      b.setAttribute("aria-pressed","true"); chosenTime = t; updateSummary();
+      b.setAttribute("aria-pressed","true"); chosenTime=t; updateSummary();
     };
     box.appendChild(b);
   });
+}
+async function loadBooked(){
+  if(!CONFIG.bookingsUrl) return;
+  try{
+    const r=await fetch(CONFIG.bookingsUrl+(CONFIG.bookingsUrl.includes("?")?"&":"?")+"action=booked&t="+Date.now());
+    const j=await r.json();
+    serverBooked=Array.isArray(j.booked)?j.booked:[];
+    renderDays();
+    if(chosenDate){
+      if(chosenTime && isBooked(chosenDate,chosenTime)) chosenTime=null;
+      renderTimes(chosenDate); updateSummary();
+    }
+  }catch(e){}
+}
+async function reserveSlot(name,phone){
+  try{
+    const r=await fetch(CONFIG.bookingsUrl,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify({action:"book",date:iso(chosenDate),time:chosenTime,name:name,phone:phone,hp:""})});
+    return await r.json();
+  }catch(e){return null;}   // if the booking service is unreachable, do not block the request
 }
 function prettyDate(d){return d.toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"long",year:"numeric"});}
 function updateSummary(){
@@ -365,9 +414,9 @@ const ASSESS=[
 function renderAssess(){
   const box=$("assess");
   ASSESS.forEach(sc=>{
-    const sec=document.createElement("div"); sec.className="scale-sec";
-    sec.innerHTML='<p class="scale-title">'+sc.title+'</p>'+(sc.intro?'<p class="scale-intro">'+sc.intro+'</p>':'');
-    box.appendChild(sec);
+    const t=document.createElement("div");
+    t.innerHTML='<p class="scale-title">'+sc.title+'</p>'+(sc.intro?'<p class="scale-intro">'+sc.intro+'</p>':'');
+    box.appendChild(t);
     sc.items.forEach((txt,k)=>{
       const f=document.createElement("fieldset"); f.className="q"; f.id="q_"+sc.id+"_"+k;
       const lg=document.createElement("legend"); lg.textContent=txt; f.appendChild(lg);
@@ -379,7 +428,7 @@ function renderAssess(){
         const sp=document.createElement("span"); sp.textContent=label;
         l.appendChild(r); l.appendChild(sp); o.appendChild(l);
       });
-      f.appendChild(o); sec.appendChild(f);
+      f.appendChild(o); box.appendChild(f);
     });
   });
 }
@@ -390,35 +439,11 @@ function updateAssessBtn(){
   const btn=$("assessBtn"), open=!$("assessWrap").hidden, n=answeredCount();
   btn.setAttribute("aria-expanded",open?"true":"false");
   btn.classList.toggle("done",n===TOTAL_Q);
-  btn.textContent = open ? "Hide assessment ("+n+" of "+TOTAL_Q+" answered)"
-    : n===0 ? "Start the Short Assessment"
+  btn.textContent = open ? "Assessment: "+n+" of "+TOTAL_Q+" answered (tap to hide)"
+    : n===0 ? "Take the Short Assessment"
     : n===TOTAL_Q ? "Assessment complete \u2713 (tap to review)"
-    : "Continue assessment ("+n+" of "+TOTAL_Q+" answered)";
+    : "Assessment: "+n+" of "+TOTAL_Q+" answered (tap to continue)";
 }
-let curSec=0;
-function secs(){return document.querySelectorAll("#assess .scale-sec");}
-function secIndexOf(id){return Array.prototype.findIndex.call(secs(),s=>s.contains($(id)));}
-function showSec(i){
-  const S=secs(); if(!S.length) return;
-  curSec=Math.max(0,Math.min(S.length-1,i));
-  S.forEach((s,k)=>{s.hidden=(k!==curSec);});
-  $("partLabel").textContent="Part "+(curSec+1)+" of "+S.length;
-  $("pbar").style.width=Math.round((curSec+1)/S.length*100)+"%";
-  $("aBack").disabled=(curSec===0);
-  const last=(curSec===S.length-1);
-  $("aNext").hidden=last; $("consentRow").hidden=!last; $("aErr").textContent="";
-}
-$("aBack").onclick=()=>{showSec(curSec-1); $("assessWrap").scrollIntoView({behavior:"smooth",block:"start"});};
-$("aNext").onclick=()=>{
-  const qs=Array.prototype.slice.call(secs()[curSec].querySelectorAll(".q"));
-  const miss=qs.filter(q=>!q.querySelector("input:checked"));
-  qs.forEach(q=>q.classList.toggle("missing",miss.indexOf(q)>-1));
-  if(miss.length){
-    $("aErr").textContent="Please answer the highlighted "+(miss.length>1?"questions":"question")+" to continue.";
-    miss[0].scrollIntoView({behavior:"smooth",block:"center"}); return;
-  }
-  showSec(curSec+1); $("assessWrap").scrollIntoView({behavior:"smooth",block:"start"});
-};
 function openAssess(){$("assessWrap").hidden=false; updateAssessBtn();}
 $("assessBtn").onclick=()=>{$("assessWrap").hidden=!$("assessWrap").hidden; updateAssessBtn();};
 $("assess").addEventListener("change",updateAssessBtn);
@@ -500,22 +525,21 @@ function interpret(res){
   const sf=res.safe[0];
   const safe=sf===1?"*SAFETY: answered YES to thoughts of ending life or self-harm. Please follow up soon.*":sf===2?"Safety question: preferred not to say.":"Safety question: answered No.";
   const summary=buildSummary(res,{spin,gad,who,ros,rscored});
-  return {safe,summary,lines:L,scores:{spin,gad,who,ros,sf},items:{spin:res.spin,gad:res.gad,who:res.who,rses:res.rses}};
+  return {safe,summary,lines:L,items:{spin:res.spin,gad:res.gad,who:res.who,rses:res.rses}};
 }
 $("send").onclick = async () => {
   const name=$("name").value.trim(), phone=$("phone").value.trim(), email=$("email").value.trim(), msg=$("msg").value.trim();
   const err=$("err"); err.textContent="";
   if(!chosenDate || !chosenTime){err.textContent="Please choose a day and a time."; return;}
   if(!name || !phone){err.textContent="Please add your name and phone number."; return;}
-  if(CONFIG.bookingsUrl && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent="Please add a valid email so I can send your confirmation and session link."; return;}
   const {res,missing}=readAssess();
   if(missing.length){
-    openAssess(); showSec(secIndexOf(missing[0]));
+    openAssess();
     document.querySelectorAll(".q").forEach(q=>q.classList.toggle("missing",missing.includes(q.id)));
     err.textContent="Please answer all the questions ("+missing.length+" left).";
     $(missing[0]).scrollIntoView({behavior:"smooth",block:"center"}); return;
   }
-  if(!$("consent").checked){openAssess(); showSec(secs().length-1); err.textContent="Please tick the box to agree to share your answers."; $("consent").scrollIntoView({behavior:"smooth",block:"center"}); return;}
+  if(!$("consent").checked){openAssess(); err.textContent="Please tick the box to agree to share your answers."; $("consent").scrollIntoView({behavior:"smooth",block:"center"}); return;}
   const r=interpret(res), flagged=res.safe[0]===1;
   const details="Date: "+prettyDate(chosenDate)+"\nTime: "+chosenTime+"\nSession fee: "+CONFIG.price+"\nName: "+name+"\nPhone: "+phone+(email?"\nEmail: "+email:"")+(msg?"\nSupport needed: "+msg:"");
   const assess="*Pre-session questionnaire* (self-report screening, not a diagnosis)\n"+r.safe+
@@ -526,47 +550,95 @@ $("send").onclick = async () => {
   const btn=$("send"), label=btn.textContent;
   btn.disabled=true; btn.textContent="Sending...";
   const w=window.open("","_blank");           // opened now so the browser allows it; filled in below
-  let saved="", emailed=false;
   if(CONFIG.bookingsUrl){
-    const report={safety:r.scores.sf,spin:r.scores.spin,gad:r.scores.gad,who:r.scores.who,ros:r.scores.ros,
-      summary:r.summary.filter(x=>x.indexOf("- ")===0),items:r.items};
-    const out=await saveBooking(name,phone,details,assess,flagged,report);
-    saved=out.status; emailed=out.emailed;
-    if(saved==="taken"||saved==="limit"){
+    const rv=await reserveSlot(name,phone);
+    if(rv && rv.ok===false){
       if(w) w.close();
-      btn.disabled=false; btn.textContent=label;
-      if(saved==="taken"){
-        err.textContent="Sorry, that time was just booked by someone else. Please choose another time.";
-        chosenTime=null; await loadBooked(); renderTimes(chosenDate); updateSummary();
-      } else err.textContent="You already have the maximum number of upcoming sessions requested. Please message me on WhatsApp to change one.";
-      return;
+      err.textContent = rv.error==="taken" ? "Sorry, that time was just booked by someone else. Please pick another time."
+        : rv.error==="limit" ? "This phone number already has the maximum number of upcoming requests. Please message me on WhatsApp directly."
+        : "Something went wrong saving your booking. Please try again.";
+      if(rv.error==="taken") loadBooked();
+      btn.disabled=false; btn.textContent=label; return;
     }
+  }
+  let emailed=false;
+  if(CONFIG.web3formsKey){
+    emailed=await sendEmail((flagged?"[SAFETY FLAG] ":"")+"Assessment results: "+name+", "+prettyDate(chosenDate)+" "+chosenTime,
+      "New session request and assessment results\n\n"+details+"\n\n"+assess,name,email);
   }
   let waText="Hello, I'd like to book a session.\n\n"+details;
   if(emailed) waText+="\n\nAssessment completed: results sent to your email."+(flagged?"\nPriority: please check your email soon.":"");
   else waText+="\n\n"+assess;                  // fallback so results are never lost if email is off or fails
   const url="https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(waText);
   if(w && !w.closed){w.location.href=url;} else {window.location.href=url;}
+  if(CONFIG.bookingsUrl){serverBooked.push({date:iso(chosenDate),time:chosenTime}); chosenTime=null; renderDays(); renderTimes(chosenDate); updateSummary();}
   btn.disabled=false; btn.textContent=label;
 };
-async function saveBooking(name,phone,details,assess,flagged,report){
-  const ctl=new AbortController(), t=setTimeout(()=>ctl.abort(),15000);
+async function sendEmail(subject,message,name,email){
+  const body={access_key:CONFIG.web3formsKey,subject:subject,from_name:"Counselling website",name:name,message:message,botcheck:""};
+  if(email) body.email=email;
+  const ctl=new AbortController(), t=setTimeout(()=>ctl.abort(),9000);
   try{
-    const resp=await fetch(CONFIG.bookingsUrl,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
-      body:JSON.stringify({date:iso(chosenDate),time:chosenTime,name:name,phone:phone.replace(/[\s\-()]/g,""),email:$("email").value.trim(),
-        details:details,assessment:assess,flagged:flagged,report:report,hp:""}),signal:ctl.signal});
-    const j=await resp.json();
-    if(j.ok) return {status:"ok",emailed:!!j.emailed};
-    return {status:(j.error==="taken"||j.error==="limit")?j.error:"error",emailed:false};
-  }catch(e){return {status:"error",emailed:false};}   // network trouble: carry on with WhatsApp (answers go in the message) so nothing is lost
+    const resp=await fetch("https://api.web3forms.com/submit",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(body),signal:ctl.signal});
+    const j=await resp.json(); return !!(resp.ok && j.success);
+  }catch(e){return false;}
   finally{clearTimeout(t);}
 }
-if(CONFIG.bookingsUrl){
+if(CONFIG.web3formsKey){
   $("consentTxt").textContent="I agree to share my booking details with Abhishek by WhatsApp, and my assessment answers by email, so he can prepare for our session.";
-  $("noteTxt").textContent="Your booking request opens in WhatsApp so you can send it to me directly. Your assessment answers are sent privately to my own email and are not sent in WhatsApp. Your name, phone, email, date and time are saved in my private booking sheet so I can confirm your session and send you the session link. Everything you share stays confidential. This service is support and counselling, not emergency care. If you are in crisis, call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours, India) or your local emergency number.";
+  $("noteTxt").textContent="Your booking request opens in WhatsApp so you can send it to me directly. Your assessment answers are emailed to me through a form service (Web3Forms) and are not sent in WhatsApp. Everything you share stays confidential. This service is support and counselling, not emergency care. If you are in crisis, call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours, India) or your local emergency number.";
 }
 $("contactline").innerHTML = 'Email: <a href="mailto:'+CONFIG.email+'">'+CONFIG.email+'</a>';
-buildDays(); renderDays(); renderAssess(); showSec(0); loadBooked();
+buildDays(); renderDays(); renderAssess(); loadBooked();
+
+/* ---------- floating Book button (phones): shows after the top buttons scroll away, hides at the booking form ---------- */
+(function(){
+  const fab=document.getElementById("fab"), hero=document.querySelector(".hero .btn"), book=document.getElementById("book");
+  if(!fab||!hero||!book||!("IntersectionObserver" in window)) return;
+  let heroVis=true, bookVis=false;
+  const upd=()=>{const on=!heroVis && !bookVis; fab.classList.toggle("show",on); document.body.classList.toggle("fab-on",on);};
+  new IntersectionObserver(e=>{heroVis=e[0].isIntersecting; upd();}).observe(hero);
+  new IntersectionObserver(e=>{bookVis=e[0].isIntersecting; upd();},{threshold:0.05}).observe(book);
+})();
+
+
+/* ---------- moving image strip ---------- */
+(function(){
+  const svg=(inner,defs)=>'<svg viewBox="0 0 240 320" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+(defs||"")+inner+'</svg>';
+  const leaf=()=>{let v="";for(let i=0;i<6;i++){const y=95+i*28;v+='<path d="M120 '+(y+20)+' L'+(120-36)+' '+(y-6)+' M120 '+(y+20)+' L'+(120+36)+' '+(y-6)+'" stroke="#E3EFE8" stroke-width="2" fill="none" stroke-linecap="round" opacity=".85"/>';}
+    return svg('<defs><linearGradient id="gl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E3EFE8"/><stop offset="1" stop-color="#C6DFD2"/></linearGradient></defs><rect width="240" height="320" fill="url(#gl)"/><path d="M120 36 C196 100 196 222 120 282 C44 222 44 100 120 36 Z" fill="#4F8F86"/><path d="M120 56 L120 276" stroke="#E3EFE8" stroke-width="2.5" stroke-linecap="round"/>'+v+'<path d="M52 300 C70 270 92 262 112 262" stroke="#4F8F86" stroke-width="3" fill="none" stroke-linecap="round" opacity=".5"/>');};
+  const dahlia=()=>{let p="";for(let i=0;i<16;i++)p+='<ellipse cx="0" cy="-50" rx="13" ry="40" transform="rotate('+(i*22.5)+')" fill="#F2B8A0"/>';
+    for(let i=0;i<12;i++)p+='<ellipse cx="0" cy="-30" rx="11" ry="26" transform="rotate('+(i*30+15)+')" fill="#F7CDBA"/>';
+    for(let i=0;i<9;i++)p+='<ellipse cx="0" cy="-15" rx="8" ry="14" transform="rotate('+(i*40)+')" fill="#FBE0D2"/>';
+    return svg('<rect width="240" height="320" fill="#1F3A44"/><g transform="translate(120 150)">'+p+'<circle r="9" fill="#F2A27C"/></g><path d="M0 320 Q60 260 120 300 T240 280 L240 320Z" fill="#2A6F77" opacity=".55"/>');};
+  const sunrise=()=>svg('<defs><linearGradient id="gs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FCE6DA"/><stop offset="1" stop-color="#F8D2BD"/></linearGradient></defs><rect width="240" height="320" fill="url(#gs)"/><circle cx="120" cy="150" r="54" fill="#F2A27C"/><path d="M0 232 Q60 190 120 226 T240 214 L240 320 L0 320Z" fill="#A9CDBF"/><path d="M0 266 Q80 228 160 260 T240 250 L240 320 L0 320Z" fill="#2A6F77"/>');
+  const ripples=()=>{let c="";for(let r=22;r<=150;r+=24)c+='<circle cx="120" cy="165" r="'+r+'" fill="none" stroke="#fff" stroke-opacity="'+(0.55-r/380).toFixed(2)+'" stroke-width="2"/>';
+    return svg('<defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A6F77"/><stop offset="1" stop-color="#4C9AA0"/></linearGradient></defs><rect width="240" height="320" fill="url(#gr)"/>'+c+'<circle cx="120" cy="165" r="9" fill="#FCE6DA"/>');};
+  const branch=()=>{let l="";const pts=[[100,150],[88,120],[78,92],[74,70],[132,140],[140,108],[146,82],[132,60],[150,168],[168,150],[182,128],[190,104]];
+    pts.forEach((p,i)=>{l+='<ellipse cx="'+p[0]+'" cy="'+p[1]+'" rx="8" ry="4.5" transform="rotate('+(i%2?-35:35)+' '+p[0]+' '+p[1]+')" fill="#6FAE9F"/>';});
+    let b="";[[78,70],[74,62],[132,60],[128,52],[146,82],[190,104],[186,96]].forEach(p=>{b+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="6" fill="#fff"/><circle cx="'+(p[0]+5)+'" cy="'+(p[1]+4)+'" r="4.5" fill="#fff" opacity=".85"/>';});
+    return svg('<rect width="240" height="320" fill="#EEF5EF"/><g transform="translate(0 -30)"><path d="M120 214 C112 170 92 130 74 70 M120 214 C122 160 132 110 132 60 M120 214 C134 180 168 150 190 104" stroke="#4F8F86" stroke-width="3" fill="none" stroke-linecap="round"/>'+l+b+'<path d="M96 214 L96 252 Q96 288 120 288 Q144 288 144 252 L144 214 Q144 206 136 202 L136 196 L104 196 L104 202 Q96 206 96 214Z" fill="#fff" fill-opacity=".55" stroke="#2A6F77" stroke-width="1.6"/><path d="M97 240 L143 240 L143 252 Q143 286 120 286 Q97 286 97 252Z" fill="#BFDDE4" fill-opacity=".7"/></g>');};
+  const cairn=()=>svg('<rect width="240" height="320" fill="#E2EEF5"/><rect y="262" width="240" height="58" fill="#C9DDEB"/><path d="M0 276 Q30 268 60 276 T120 276 T180 276 T240 276 M0 296 Q30 288 60 296 T120 296 T180 296 T240 296" stroke="#fff" stroke-opacity=".7" stroke-width="2" fill="none"/><ellipse cx="120" cy="250" rx="64" ry="22" fill="#55707A"/><ellipse cx="120" cy="212" rx="48" ry="18" fill="#2A6F77"/><ellipse cx="122" cy="181" rx="33" ry="14" fill="#F2A27C"/><ellipse cx="120" cy="157" rx="21" ry="10" fill="#1F3A44"/>');
+  const art=[[leaf,"Breathe",false],[dahlia,"Feel heard",true],[sunrise,"Take your time",true],[ripples,"Be kind to yourself",true],[branch,"Grow gently",false],[cairn,"One step at a time",false]];
+  const track=document.getElementById("stripTrack"), strip=document.getElementById("strip"), btn=document.getElementById("stripBtn");
+  if(!track) return;
+  function panel(i){
+    const f=document.createElement("figure"); f.className="shot"; f.style.margin="0";
+    if(CONFIG.photos && CONFIG.photos.length){
+      const im=document.createElement("img"); im.src=CONFIG.photos[i%CONFIG.photos.length]; im.alt=""; im.loading="lazy"; f.appendChild(im);
+    }else{
+      const a=art[i%art.length]; f.innerHTML=a[0](); if(a[2]) f.classList.add("light");
+      const c=document.createElement("figcaption"); c.textContent=a[1]; f.appendChild(c);
+    }
+    return f;
+  }
+  const n=(CONFIG.photos&&CONFIG.photos.length)?CONFIG.photos.length:art.length;
+  const half=Math.max(n, Math.ceil(Math.max(window.innerWidth,screen.width)/180));   // enough panels to fill a wide screen
+  const total=Math.ceil(half/n)*n;
+  for(let k=0;k<2;k++) for(let i=0;i<total;i++){const f=panel(i); if(k===1) f.setAttribute("aria-hidden","true"); track.appendChild(f);}
+  btn.onclick=()=>{const p=!strip.classList.contains("paused"); strip.classList.toggle("paused",p); btn.setAttribute("aria-pressed",p?"true":"false"); btn.textContent=p?"Play motion":"Pause motion";};
+})();
+
 </script>
 </body>
 </html>
