@@ -288,7 +288,7 @@ const CONFIG = {
   email: "growthwiththeabhishek@gmail.com",
   price: "₹499",
   web3formsKey: "051af225-423c-4492-ba93-26c4915aeb8b",                  // paste your free Web3Forms access key here to ALSO get every request by email (leave empty for WhatsApp only)
-  bookingsUrl: "",                   // Google Apps Script web app URL (see booking-backend.gs). Makes booked times turn grey for everyone, automatically
+  bookingsUrl: "https://script.google.com/macros/s/AKfycbxO49CC4GKU1g-YB6GkjRxyHvP8yz1fwgNfJo95B4WB47eCtPxZYljBBfW_PPQMiHpF/exec",                   // Google Apps Script web app URL (see booking-backend.gs). Makes booked times turn grey for everyone, automatically
   booked: [],                        // optional manual list of taken times, e.g. "2026-10-20 2:00 PM"
   photos: [],                        // optional: your own images for the moving strip, e.g. ["photos/1.jpg","photos/2.jpg"]. Leave empty to use the built-in artwork
   daysAhead: 60,                     // how many days ahead people can book (always counted from today, so it never runs out)
@@ -380,12 +380,13 @@ async function loadBooked(){
     }
   }catch(e){}
 }
-async function reserveSlot(name,phone){
+async function reserveSlot(name,phone,email,details,assess,report,flagged){
   try{
     const r=await fetch(CONFIG.bookingsUrl,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
-      body:JSON.stringify({action:"book",date:iso(chosenDate),time:chosenTime,name:name,phone:phone,hp:""})});
+      body:JSON.stringify({action:"book",date:iso(chosenDate),time:chosenTime,name:name,phone:phone,email:email,
+        details:details,assessment:assess,report:report,flagged:flagged,hp:""})});
     return await r.json();
-  }catch(e){return null;}   // if the booking service is unreachable, do not block the request
+  }catch(e){console.error("Booking service problem:",e); return null;}   // if the booking service is unreachable, do not block the request
 }
 function prettyDate(d){return d.toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"long",year:"numeric"});}
 function updateSummary(){
@@ -525,7 +526,7 @@ function interpret(res){
   const sf=res.safe[0];
   const safe=sf===1?"*SAFETY: answered YES to thoughts of ending life or self-harm. Please follow up soon.*":sf===2?"Safety question: preferred not to say.":"Safety question: answered No.";
   const summary=buildSummary(res,{spin,gad,who,ros,rscored});
-  return {safe,summary,lines:L,items:{spin:res.spin,gad:res.gad,who:res.who,rses:res.rses}};
+  return {safe,summary,lines:L,scores:{spin,gad,who,ros},sf,items:{spin:res.spin,gad:res.gad,who:res.who,rses:res.rses}};
 }
 $("send").onclick = async () => {
   const name=$("name").value.trim(), phone=$("phone").value.trim(), email=$("email").value.trim(), msg=$("msg").value.trim();
@@ -550,8 +551,12 @@ $("send").onclick = async () => {
   const btn=$("send"), label=btn.textContent;
   btn.disabled=true; btn.textContent="Sending...";
   const w=window.open("","_blank");           // opened now so the browser allows it; filled in below
+  let emailed=false, rv=null;
   if(CONFIG.bookingsUrl){
-    const rv=await reserveSlot(name,phone);
+    const report={spin:r.scores.spin,gad:r.scores.gad,who:r.scores.who,ros:r.scores.ros,safety:r.sf,
+      summary:r.summary.filter(l=>l.charAt(0)!=="_"),items:r.items};
+    rv=await reserveSlot(name,phone,email,details,assess,report,flagged);
+    if(rv && rv.ok===true && rv.emailed===true) emailed=true;
     if(rv && rv.ok===false){
       if(w) w.close();
       err.textContent = rv.error==="taken" ? "Sorry, that time was just booked by someone else. Please pick another time."
@@ -561,8 +566,7 @@ $("send").onclick = async () => {
       btn.disabled=false; btn.textContent=label; return;
     }
   }
-  let emailed=false;
-  if(CONFIG.web3formsKey){
+  if(!emailed && CONFIG.web3formsKey){
     emailed=await sendEmail((flagged?"[SAFETY FLAG] ":"")+"Assessment results: "+name+", "+prettyDate(chosenDate)+" "+chosenTime,
       "New session request and assessment results\n\n"+details+"\n\n"+assess,name,email);
   }
@@ -586,7 +590,7 @@ async function sendEmail(subject,message,name,email){
 }
 if(CONFIG.web3formsKey){
   $("consentTxt").textContent="I agree to share my booking details with Abhishek by WhatsApp, and my assessment answers by email, so he can prepare for our session.";
-  $("noteTxt").textContent="Your booking request opens in WhatsApp so you can send it to me directly. Your assessment answers are emailed to me through a form service (Web3Forms) and are not sent in WhatsApp. Everything you share stays confidential. This service is support and counselling, not emergency care. If you are in crisis, call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours, India) or your local emergency number.";
+  $("noteTxt").textContent="Your booking request opens in WhatsApp so you can send it to me directly. Your assessment answers are emailed to me through a secure form service and are not sent in WhatsApp. Everything you share stays confidential. This service is support and counselling, not emergency care. If you are in crisis, call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours, India) or your local emergency number.";
 }
 $("contactline").innerHTML = 'Email: <a href="mailto:'+CONFIG.email+'">'+CONFIG.email+'</a>';
 buildDays(); renderDays(); renderAssess(); loadBooked();
