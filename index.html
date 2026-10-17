@@ -98,13 +98,13 @@ nav a:hover{color:var(--ink)}
 .strip-track{display:flex;gap:16px;width:max-content;animation:stripMove 70s linear infinite}
 .strip.paused .strip-track{animation-play-state:paused}
 @keyframes stripMove{from{transform:translateX(-50%)}to{transform:translateX(0)}}
-.shot{position:relative;flex:none;width:210px;height:290px;border-radius:22px;overflow:hidden;background:var(--sage)}
-.shot:nth-child(odd){border-radius:105px 105px 22px 22px}
+.shot{position:relative;flex:none;width:160px;height:220px;border-radius:18px;overflow:hidden;background:var(--sage)}
+.shot:nth-child(odd){border-radius:80px 80px 18px 18px}
 .shot svg,.shot img{width:100%;height:100%;display:block;object-fit:cover}
-.shot figcaption{position:absolute;left:12px;right:12px;bottom:18px;text-align:center;font:400 1.1rem var(--serif);line-height:1.2;color:var(--ink)}
+.shot figcaption{position:absolute;left:10px;right:10px;bottom:13px;text-align:center;font:400 .92rem var(--serif);line-height:1.2;color:var(--ink)}
 .shot.light figcaption{color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.25)}
 .strip-ctl{display:flex;justify-content:flex-end;margin-top:6px}
-@media (max-width:520px){.shot{width:150px;height:210px}.shot:nth-child(odd){border-radius:75px 75px 18px 18px}.shot figcaption{font-size:.95rem;bottom:12px}}
+@media (max-width:520px){.shot{width:110px;height:155px}.shot:nth-child(odd){border-radius:55px 55px 14px 14px}.shot figcaption{font-size:.76rem;left:6px;right:6px;bottom:9px}.strip-track{gap:12px}}
 @media (prefers-reduced-motion:reduce){.strip-track{animation:none}.strip-view{overflow-x:auto}.strip-ctl{display:none}}
 .pager{display:flex;justify-content:space-between;margin-top:10px}
 .pg{background:transparent;border:0;color:var(--teal);font:600 .92rem var(--sans);cursor:pointer;padding:6px 2px}
@@ -633,9 +633,20 @@ buildDays(); renderDays(); renderAssess(); loadBooked();
     return f;
   }
   const n=(CONFIG.photos&&CONFIG.photos.length)?CONFIG.photos.length:art.length;
-  const half=Math.max(n, Math.ceil(Math.max(window.innerWidth,screen.width)/180));   // enough panels to fill a wide screen
-  const total=Math.ceil(half/n)*n;
-  for(let k=0;k<2;k++) for(let i=0;i<total;i++){const f=panel(i); if(k===1) f.setAttribute("aria-hidden","true"); track.appendChild(f);}
+  const SPEED_PHONE=70, SPEED_DESKTOP=40;                 // pixels per second: raise a number to make the strip faster
+  function build(){
+    track.innerHTML="";
+    const probe=panel(0); track.appendChild(probe);
+    const pw=probe.getBoundingClientRect().width+parseFloat(getComputedStyle(track).columnGap||16);
+    track.innerHTML="";
+    const need=Math.ceil(Math.max(window.innerWidth,screen.width)/pw)+1;     // panels needed to fill the widest screen
+    const total=Math.ceil(need/n)*n;
+    for(let k=0;k<2;k++) for(let i=0;i<total;i++){const f=panel(i); if(k===1) f.setAttribute("aria-hidden","true"); track.appendChild(f);}
+    const half=track.scrollWidth/2, speed=window.innerWidth<=520?SPEED_PHONE:SPEED_DESKTOP;
+    track.style.animationDuration=Math.max(10,half/speed).toFixed(1)+"s";
+  }
+  build();
+  let rt; window.addEventListener("resize",()=>{clearTimeout(rt); rt=setTimeout(build,250);});
   btn.onclick=()=>{const p=!strip.classList.contains("paused"); strip.classList.toggle("paused",p); btn.setAttribute("aria-pressed",p?"true":"false"); btn.textContent=p?"Play motion":"Pause motion";};
 })();
 
