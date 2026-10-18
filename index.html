@@ -317,13 +317,14 @@ let chosenDate = null, chosenTime = null;
 let allDays=[], page=0;
 const PER_PAGE=7;
 function buildDays(){
-  const today=new Date();
+  allDays=[]; const today=new Date();
   for(let i=1;i<=CONFIG.daysAhead;i++){
     const d=new Date(today.getFullYear(),today.getMonth(),today.getDate()+i);
-    if((CONFIG.slots[d.getDay()]||[]).length && !CONFIG.blocked.includes(iso(d)) && !(window.BLOCKED_DATES||[]).includes(iso(d))) allDays.push(d);
+    if(slotsFor(d).length && !CONFIG.blocked.includes(iso(d)) && !(window.BLOCKED_DATES||[]).includes(iso(d))) allDays.push(d);
   }
 }
-let serverBooked=[];
+let serverBooked=[], serverOver={};
+function slotsFor(d){const o=serverOver[iso(d)]; if(o) return o.closed?[]:(o.times||[]); return CONFIG.slots[d.getDay()]||[];}
 function bookedMap(){
   const m={}, add=(d,t)=>{(m[d]=m[d]||new Set()).add(t);};
   (CONFIG.booked||[]).concat(window.BOOKED||[]).forEach(x=>{const k=x.indexOf(" "); if(k>0) add(x.slice(0,k).trim(),x.slice(k+1).trim());});
@@ -331,7 +332,7 @@ function bookedMap(){
   return m;
 }
 function isBooked(d,t){const m=bookedMap()[iso(d)]; return !!(m&&m.has(t));}
-function dayFull(d){return CONFIG.slots[d.getDay()].every(t=>isBooked(d,t));}
+function dayFull(d){return slotsFor(d).every(t=>isBooked(d,t));}
 function renderDays(){
   const box=$("days"); box.innerHTML="";
   allDays.slice(page*PER_PAGE,(page+1)*PER_PAGE).forEach(d=>{
@@ -356,7 +357,7 @@ $("prevDays").onclick=()=>{if(page>0){page--;renderDays();}};
 $("nextDays").onclick=()=>{if((page+1)*PER_PAGE<allDays.length){page++;renderDays();}};
 function renderTimes(d){
   const box=$("times"); box.innerHTML="";
-  CONFIG.slots[d.getDay()].forEach(t=>{
+  slotsFor(d).forEach(t=>{
     const b=document.createElement("button"), taken=isBooked(d,t);
     b.type="button"; b.className="chip"+(taken?" booked":"");
     b.innerHTML=t+(taken?"<small>Booked</small>":"");
@@ -375,9 +376,12 @@ async function loadBooked(){
     const r=await fetch(CONFIG.bookingsUrl+(CONFIG.bookingsUrl.includes("?")?"&":"?")+"action=booked&t="+Date.now());
     const j=await r.json();
     serverBooked=Array.isArray(j.booked)?j.booked:[];
+    serverOver={}; (Array.isArray(j.overrides)?j.overrides:[]).forEach(o=>{serverOver[o.date]=o;});
+    buildDays(); if(page*PER_PAGE>=allDays.length) page=0;
+    if(chosenDate && !slotsFor(chosenDate).length){chosenDate=null; chosenTime=null; $("times").innerHTML='<span class="hint">Choose a day to see available times.</span>'; updateSummary();}
     renderDays();
     if(chosenDate){
-      if(chosenTime && isBooked(chosenDate,chosenTime)) chosenTime=null;
+      if(chosenTime && (isBooked(chosenDate,chosenTime)||!slotsFor(chosenDate).includes(chosenTime))) chosenTime=null;
       renderTimes(chosenDate); updateSummary();
     }
   }catch(e){}
@@ -561,10 +565,10 @@ $("send").onclick = async () => {
     if(rv && rv.ok===true && rv.emailed===true) emailed=true;
     if(rv && rv.ok===false){
       if(w) w.close();
-      err.textContent = rv.error==="taken" ? "Sorry, that time was just booked by someone else. Please pick another time."
+      err.textContent = (rv.error==="taken"||rv.error==="unavailable") ? "Sorry, that time is no longer available. Please pick another time."
         : rv.error==="limit" ? "This phone number already has the maximum number of upcoming requests. Please message me on WhatsApp directly."
         : "Something went wrong saving your booking. Please try again.";
-      if(rv.error==="taken") loadBooked();
+      if(rv.error==="taken"||rv.error==="unavailable") loadBooked();
       btn.disabled=false; btn.textContent=label; return;
     }
   }
