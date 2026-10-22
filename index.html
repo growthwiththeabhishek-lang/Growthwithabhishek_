@@ -333,6 +333,25 @@ label{margin:20px 0 6px}
 .landing{min-height:0}
 .stage{padding-bottom:48px}
 .strip{padding:8px 0 40px}
+
+/* ===== Booking success popup ===== */
+footer .adminlink{margin-top:14px;font-size:.75rem;opacity:.55}
+footer .adminlink a{color:inherit;text-decoration:none}
+footer .adminlink a:hover{text-decoration:underline;opacity:1}
+.bm{position:fixed;inset:0;z-index:1000;background:rgba(43,52,69,.55);display:flex;align-items:center;justify-content:center;padding:20px}
+.bm[hidden]{display:none}
+.bm-card{background:#fff;border-radius:22px;max-width:440px;width:100%;padding:30px 26px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25);max-height:90vh;overflow:auto}
+.bm-tick{width:56px;height:56px;border-radius:50%;background:var(--sage);color:var(--teal);font-size:30px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.bm-card h3{font-size:1.5rem;margin:0 0 6px}
+.bm-when{font-weight:700;color:var(--teal);margin:0 0 12px}
+.bm-card p{margin:8px 0}
+.bm-flag{background:var(--peach);border-radius:12px;padding:12px 14px;font-size:.95rem;text-align:left}
+.bm-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:18px}
+.bm-done{background:var(--ink);color:#fff}
+.visit{border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin:16px 0 6px}
+.visit legend{font-weight:600;padding:0 6px}
+.visit label{display:flex;align-items:center;gap:10px;margin:6px 0;font-weight:500;cursor:pointer}
+.visit input{width:auto;margin:0}
 </style>
 </head>
 <body>
@@ -422,6 +441,11 @@ label{margin:20px 0 6px}
     </div>
     <label for="email">Email</label><input id="email" type="email" autocomplete="email">
     <label for="msg">What would you like support with? (optional)</label><textarea id="msg"></textarea>
+    <fieldset class="visit" id="visitBox"><legend>Is this your first session with me?</legend>
+      <label><input type="radio" name="visit" value="first"> Yes, this is my first session</label>
+      <label><input type="radio" name="visit" value="returning"> No, I am coming back</label>
+    </fieldset>
+    <div id="assessBlock" hidden>
     <h3>4. A Short Assessment</h3>
     <p class="assess-intro">A few quick questions help me understand how you've been feeling, so our first session can start where you are. It takes about 4 minutes, and there are no right or wrong answers.</p>
     <button type="button" class="btn-assess" id="assessBtn" aria-expanded="false" aria-controls="assessWrap">Take the Short Assessment</button>
@@ -429,6 +453,7 @@ label{margin:20px 0 6px}
     <div id="assessWrap" hidden>
       <div id="assess"></div>
       <label class="consent"><input type="checkbox" id="consent"><span id="consentTxt">I agree to share my answers with Abhishek by WhatsApp so he can prepare for our session.</span></label>
+    </div>
     </div>
     <div class="summary" id="summary" hidden></div>
     <div class="err" id="err" role="alert"></div>
@@ -441,7 +466,22 @@ label{margin:20px 0 6px}
   <p>Growth by Abhishek Prajapati | Counsellor, Mental Health Advocate, Mental Health First Aider (USA)</p>
   <p>Indore, Madhya Pradesh, India</p>
   <p id="contactline"></p>
+  <p class="adminlink"><a href="admin.html" rel="nofollow">Admin</a></p>
 </div></footer>
+
+<div class="bm" id="bookedModal" hidden>
+  <div class="bm-card" role="dialog" aria-modal="true" aria-labelledby="bmTitle">
+    <div class="bm-tick" aria-hidden="true">&#10003;</div>
+    <h3 id="bmTitle"></h3>
+    <p class="bm-when" id="bmWhen"></p>
+    <p id="bmBody"></p>
+    <p class="bm-flag" id="bmFlag" hidden></p>
+    <div class="bm-actions">
+      <a class="btn" id="bmWa" href="#" target="_blank" rel="noopener">Open WhatsApp</a>
+      <button class="btn bm-done" id="bmDone" type="button">Done</button>
+    </div>
+  </div>
+</div>
 
 <script src="booked.js"></script>
 <script>
@@ -478,13 +518,14 @@ let chosenDate = null, chosenTime = null;
 let allDays=[], page=0;
 const PER_PAGE=7;
 function buildDays(){
-  const today=new Date();
+  allDays=[]; const today=new Date();
   for(let i=1;i<=CONFIG.daysAhead;i++){
     const d=new Date(today.getFullYear(),today.getMonth(),today.getDate()+i);
-    if((CONFIG.slots[d.getDay()]||[]).length && !CONFIG.blocked.includes(iso(d)) && !(window.BLOCKED_DATES||[]).includes(iso(d))) allDays.push(d);
+    if(slotsFor(d).length && !CONFIG.blocked.includes(iso(d)) && !(window.BLOCKED_DATES||[]).includes(iso(d))) allDays.push(d);
   }
 }
-let serverBooked=[];
+let serverBooked=[], serverOver={};
+function slotsFor(d){const o=serverOver[iso(d)]; if(o) return o.closed?[]:(o.times||[]); return CONFIG.slots[d.getDay()]||[];}
 function bookedMap(){
   const m={}, add=(d,t)=>{(m[d]=m[d]||new Set()).add(t);};
   (CONFIG.booked||[]).concat(window.BOOKED||[]).forEach(x=>{const k=x.indexOf(" "); if(k>0) add(x.slice(0,k).trim(),x.slice(k+1).trim());});
@@ -492,7 +533,7 @@ function bookedMap(){
   return m;
 }
 function isBooked(d,t){const m=bookedMap()[iso(d)]; return !!(m&&m.has(t));}
-function dayFull(d){return CONFIG.slots[d.getDay()].every(t=>isBooked(d,t));}
+function dayFull(d){return slotsFor(d).every(t=>isBooked(d,t));}
 function renderDays(){
   const box=$("days"); box.innerHTML="";
   allDays.slice(page*PER_PAGE,(page+1)*PER_PAGE).forEach(d=>{
@@ -517,7 +558,7 @@ $("prevDays").onclick=()=>{if(page>0){page--;renderDays();}};
 $("nextDays").onclick=()=>{if((page+1)*PER_PAGE<allDays.length){page++;renderDays();}};
 function renderTimes(d){
   const box=$("times"); box.innerHTML="";
-  CONFIG.slots[d.getDay()].forEach(t=>{
+  slotsFor(d).forEach(t=>{
     const b=document.createElement("button"), taken=isBooked(d,t);
     b.type="button"; b.className="chip"+(taken?" booked":"");
     b.innerHTML=t+(taken?"<small>Booked</small>":"");
@@ -536,18 +577,21 @@ async function loadBooked(){
     const r=await fetch(CONFIG.bookingsUrl+(CONFIG.bookingsUrl.includes("?")?"&":"?")+"action=booked&t="+Date.now());
     const j=await r.json();
     serverBooked=Array.isArray(j.booked)?j.booked:[];
+    serverOver={}; (Array.isArray(j.overrides)?j.overrides:[]).forEach(o=>{serverOver[o.date]=o;});
+    buildDays(); if(page*PER_PAGE>=allDays.length) page=0;
+    if(chosenDate && !slotsFor(chosenDate).length){chosenDate=null; chosenTime=null; $("times").innerHTML='<span class="hint">Choose a day to see available times.</span>'; updateSummary();}
     renderDays();
     if(chosenDate){
-      if(chosenTime && isBooked(chosenDate,chosenTime)) chosenTime=null;
+      if(chosenTime && (isBooked(chosenDate,chosenTime)||!slotsFor(chosenDate).includes(chosenTime))) chosenTime=null;
       renderTimes(chosenDate); updateSummary();
     }
   }catch(e){}
 }
-async function reserveSlot(name,phone,email,details,assess,report,flagged){
+async function reserveSlot(name,phone,email,details,assess,report,flagged,visit){
   try{
     const r=await fetch(CONFIG.bookingsUrl,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
       body:JSON.stringify({action:"book",date:iso(chosenDate),time:chosenTime,name:name,phone:phone,email:email,
-        details:details,assessment:assess,report:report,flagged:flagged,hp:""})});
+        details:details,assessment:assess,report:report,flagged:flagged,visit:visit,hp:""})});
     return await r.json();
   }catch(e){console.error("Booking service problem:",e); return null;}   // if the booking service is unreachable, do not block the request
 }
@@ -691,22 +735,48 @@ function interpret(res){
   const summary=buildSummary(res,{spin,gad,who,ros,rscored});
   return {safe,summary,lines:L,scores:{spin,gad,who,ros},sf,items:{spin:res.spin,gad:res.gad,who:res.who,rses:res.rses}};
 }
+function visitType(){const r=document.querySelector('input[name="visit"]:checked'); return r?r.value:"";}
+document.querySelectorAll('input[name="visit"]').forEach(r=>r.addEventListener("change",()=>{$("assessBlock").hidden=visitType()!=="first"; $("err").textContent="";}));
+function showBooked(o){
+  const m=$("bookedModal"); if(!m) return;
+  const back=document.activeElement;
+  $("bmTitle").textContent=o.saved?"Your session request is in":"One more step";
+  $("bmWhen").textContent=o.when;
+  $("bmBody").textContent=o.saved
+    ? "I have held this time for you. "+(o.email?"I will review it and email your confirmation and Google Meet link to "+o.email+".":"I will review it and message you on WhatsApp to confirm.")+" A WhatsApp message with your details also opened in a new tab. You can send it if you like, or use the button below if it did not open."
+    : "Your request is ready in WhatsApp. Please press Send there so that I receive it. If it did not open, use the button below.";
+  const fl=$("bmFlag");
+  if(o.flagged){fl.textContent="If things feel heavy right now, please do not wait for our session. You can call Tele-MANAS on 14416 or 1800-891-4416 (free, 24 hours), or message me on WhatsApp."; fl.hidden=false;} else {fl.hidden=true;}
+  $("bmWa").href=o.url;
+  function close(){m.hidden=true; document.removeEventListener("keydown",onKey); if(back&&back.focus) back.focus();}
+  function onKey(e){if(e.key==="Escape") close();}
+  $("bmDone").onclick=close;
+  m.onclick=function(e){if(e.target===m) close();};
+  document.addEventListener("keydown",onKey);
+  m.hidden=false; $("bmDone").focus();
+}
 $("send").onclick = async () => {
   const name=$("name").value.trim(), phone=$("phone").value.trim(), email=$("email").value.trim(), msg=$("msg").value.trim();
   const err=$("err"); err.textContent="";
   if(!chosenDate || !chosenTime){err.textContent="Please choose a day and a time."; return;}
   if(!name || !phone){err.textContent="Please add your name and phone number."; return;}
-  const {res,missing}=readAssess();
-  if(missing.length){
-    openAssess();
-    document.querySelectorAll(".q").forEach(q=>q.classList.toggle("missing",missing.includes(q.id)));
-    err.textContent="Please answer all the questions ("+missing.length+" left).";
-    $(missing[0]).scrollIntoView({behavior:"smooth",block:"center"}); return;
+  const visit=visitType();
+  if(!visit){err.textContent="Please tell me if this is your first session or you are coming back."; $("visitBox").scrollIntoView({behavior:"smooth",block:"center"}); return;}
+  const first=visit==="first";
+  let res=null;
+  if(first){
+    const ra=readAssess(); res=ra.res; const missing=ra.missing;
+    if(missing.length){
+      openAssess();
+      document.querySelectorAll(".q").forEach(q=>q.classList.toggle("missing",missing.includes(q.id)));
+      err.textContent="Please answer all the questions ("+missing.length+" left).";
+      $(missing[0]).scrollIntoView({behavior:"smooth",block:"center"}); return;
+    }
+    if(!$("consent").checked){openAssess(); err.textContent="Please tick the box to agree to share your answers."; $("consent").scrollIntoView({behavior:"smooth",block:"center"}); return;}
   }
-  if(!$("consent").checked){openAssess(); err.textContent="Please tick the box to agree to share your answers."; $("consent").scrollIntoView({behavior:"smooth",block:"center"}); return;}
-  const r=interpret(res), flagged=res.safe[0]===1;
-  const details="Date: "+prettyDate(chosenDate)+"\nTime: "+chosenTime+"\nSession fee: "+CONFIG.price+"\nName: "+name+"\nPhone: "+phone+(email?"\nEmail: "+email:"")+(msg?"\nSupport needed: "+msg:"");
-  const assess="*Pre-session questionnaire* (self-report screening, not a diagnosis)\n"+r.safe+
+  const r=first?interpret(res):null, flagged=first?res.safe[0]===1:false;
+  const details="Date: "+prettyDate(chosenDate)+"\nTime: "+chosenTime+"\nSession fee: "+CONFIG.price+"\nVisit: "+(first?"First session":"Returning client")+"\nName: "+name+"\nPhone: "+phone+(email?"\nEmail: "+email:"")+(msg?"\nSupport needed: "+msg:"");
+  const assess=!first?"":"*Pre-session questionnaire* (self-report screening, not a diagnosis)\n"+r.safe+
     "\n\n*Summary: what may be going on*\n"+r.summary.join("\n")+
     "\n\n*Scores*\n"+r.lines.join("\n")+
     "\n\nItem answers as ticked: Mini-SPIN "+r.items.spin.join(",")+" | GAD-7 "+r.items.gad.join(",")+" | WHO-5 "+r.items.who.join(",")+" | Rosenberg "+r.items.rses.join(",")+
@@ -716,28 +786,30 @@ $("send").onclick = async () => {
   const w=window.open("","_blank");           // opened now so the browser allows it; filled in below
   let emailed=false, rv=null;
   if(CONFIG.bookingsUrl){
-    const report={spin:r.scores.spin,gad:r.scores.gad,who:r.scores.who,ros:r.scores.ros,safety:r.sf,
+    const report=!first?null:{spin:r.scores.spin,gad:r.scores.gad,who:r.scores.who,ros:r.scores.ros,safety:r.sf,
       summary:r.summary.filter(l=>l.charAt(0)!=="_"),items:r.items};
-    rv=await reserveSlot(name,phone,email,details,assess,report,flagged);
+    rv=await reserveSlot(name,phone,email,details,assess,report,flagged,first?"first":"returning");
     if(rv && rv.ok===true && rv.emailed===true) emailed=true;
     if(rv && rv.ok===false){
       if(w) w.close();
-      err.textContent = rv.error==="taken" ? "Sorry, that time was just booked by someone else. Please pick another time."
+      err.textContent = (rv.error==="taken"||rv.error==="unavailable") ? "Sorry, that time is no longer available. Please pick another time."
         : rv.error==="limit" ? "This phone number already has the maximum number of upcoming requests. Please message me on WhatsApp directly."
         : "Something went wrong saving your booking. Please try again.";
-      if(rv.error==="taken") loadBooked();
+      if(rv.error==="taken"||rv.error==="unavailable") loadBooked();
       btn.disabled=false; btn.textContent=label; return;
     }
   }
   if(!emailed && CONFIG.web3formsKey){
-    emailed=await sendEmail((flagged?"[SAFETY FLAG] ":"")+"Assessment results: "+name+", "+prettyDate(chosenDate)+" "+chosenTime,
+    emailed=await sendEmail((flagged?"[SAFETY FLAG] ":"")+(first?"Assessment results: ":"Returning client booking: ")+name+", "+prettyDate(chosenDate)+" "+chosenTime,
       "New session request and assessment results\n\n"+details+"\n\n"+assess,name,email);
   }
   let waText="Hello, I'd like to book a session.\n\n"+details;
-  if(emailed) waText+="\n\nAssessment completed: results sent to your email."+(flagged?"\nPriority: please check your email soon.":"");
+  if(!first) waText+="\n\nReturning client: no questionnaire needed.";
+  else if(emailed) waText+="\n\nAssessment completed: results sent to your email."+(flagged?"\nPriority: please check your email soon.":"");
   else waText+="\n\n"+assess;                  // fallback so results are never lost if email is off or fails
   const url="https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(waText);
   if(w && !w.closed){w.location.href=url;} else {window.location.href=url;}
+  showBooked({when:prettyDate(chosenDate)+" at "+chosenTime,email:email,flagged:flagged,saved:!!(rv&&rv.ok===true),url:url});
   if(CONFIG.bookingsUrl){serverBooked.push({date:iso(chosenDate),time:chosenTime}); chosenTime=null; renderDays(); renderTimes(chosenDate); updateSummary();}
   btn.disabled=false; btn.textContent=label;
 };
